@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>MyGuests</title>
+
+<style>
+th, td {
+	padding: 5px;
+}
+</style>
+
+</head>
+
+<body>
+
+	<h2>MyGuests</h2>
+
+	<table border="1">
+		<tr>
+			<th>fullName</th>
+			<th>firstName</th>
+		</tr>
+		<tr  th:object="${MyGuests}" >
+			<td th:utext="*{firstName}">..</td>
+			<td th:utext="*{email}">..</td>
+		</tr>
+
+	</table>
+</body>
+</html>
