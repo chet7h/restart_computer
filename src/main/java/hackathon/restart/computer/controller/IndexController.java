@@ -19,7 +19,7 @@ public class IndexController {
 	public String index(Model model) {
 		MyGuests cc = myGuestsService.getInfo().get();
 		model.addAttribute("MyGuests", cc);
-		return "index";
+		return "auth-normal-sign-in";
 	}
 
 }
