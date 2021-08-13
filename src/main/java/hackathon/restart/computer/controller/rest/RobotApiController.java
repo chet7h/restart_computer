@@ -7,9 +7,13 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import hackathon.restart.computer.form.NavigateForm;
 
 @RestController
 @RequestMapping("robot")
@@ -41,15 +45,15 @@ public class RobotApiController {
 	 * status = 0: stop | 1: trái | 2: phải | 3: lùi | 4: tiến.
 	 * 
 	 */
-	@GetMapping("/setNavigate")
-	public String setNavigate(@RequestParam String deviceId, @RequestParam String status) {
-
+	@PostMapping("/setNavigate")
+	public String setNavigate(@RequestBody NavigateForm navigateForm) {
+		String status = navigateForm.getStatus();
 		String trueValue[] = { "0", "1", "2", "3", "4" };
 		if (!Arrays.asList(trueValue).contains(status)) {
 			status = "0";
 		}
 
-		return deviceStatus.put(deviceId, status);
+		return deviceStatus.put(navigateForm.getDeviceId(), status);
 	}
 
 }
