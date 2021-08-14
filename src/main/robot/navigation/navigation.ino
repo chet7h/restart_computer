@@ -4,15 +4,17 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 #include <L298NX2.h>
-
+#include <ESP8266httpUpdate.h>
 // ==================================================================================
 //                                     khai báo biến
 // ==================================================================================
 
 // mã thiết bị. mỗi room sẽ chưa 1 robot. nó là ID tron table [room_info]
 #define DEVICE_ID  "1"
+#define VERSION  "1.0.0"
 
-const String HOST = "http://192.168.1.6:8080/robot?deviceId=";
+const String HOST = "http://192.168.1.6";
+const int PORT = 8080;
 
 //WIFI
 ESP8266WiFiMulti WiFiMulti;
@@ -61,11 +63,11 @@ void loop() {
     HTTPClient http;
 
     Serial.print("[HTTP] begin...\n");
-    if (http.begin(client, HOST + DEVICE_ID)) {  // HTTP
+    if (http.begin(client, HOST + ":" + PORT + "/robot?deviceId=" + DEVICE_ID)) {  // HTTP
 
 
       Serial.print("[HTTP] GET...\n");
-      Serial.print(HOST + DEVICE_ID);
+      Serial.print(HOST + ":" + PORT + "/robot?deviceId=" + DEVICE_ID);
       // start connection and send HTTP header
       int httpCode = http.GET();
 
@@ -96,7 +98,7 @@ void loop() {
 
 
   // naviation
-  //0: stop | 1: trái | 2: phải | 3: lùi | 4: tiến.
+  //0: stop | 1: trái | 2: phải | 3: lùi | 4: tiến | 999: update.
   switch (status) {
     case 0:    // stop
       Serial.printf("stop");
@@ -120,7 +122,26 @@ void loop() {
       Serial.printf("tiến");
       motors.forward();
       break;
-  }
+    case 999:    // update
+      Serial.printf("update");
+      WiFiClient client;
+      //t_httpUpdate_return ret = ESPhttpUpdate.update(client, "http://server/file.bin");
+      // Or:
+      t_httpUpdate_return ret = ESPhttpUpdate.update(client, "server", 8080, "file.bin");
 
-  delay(5000);
+      switch (ret) {
+        case HTTP_UPDATE_FAILED:
+          Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s\n", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
+          break;
+
+        case HTTP_UPDATE_NO_UPDATES:
+          Serial.println("HTTP_UPDATE_NO_UPDATES");
+          break;
+
+        case HTTP_UPDATE_OK:
+          Serial.println("HTTP_UPDATE_OK");
+          break;
+      }
+      break;
+  }
 }
