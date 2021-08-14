@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class NavigateForm {
-	private String deviceId;
-	private String status;
+	private int deviceId;
+	private int navigateControl;
+	private int armControl;
 	private String token;
 
 }
