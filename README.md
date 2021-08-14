@@ -5,7 +5,7 @@
       dd
   * Queue
   * Control:60%
-  * Admin88
+  * Admin882
   * popup setmap
   
 ## Batch
