@@ -4,7 +4,7 @@
   * Login:
       dd
   * Queue
-  * Control
+  * Control:60%
   * Admin
   * popup setmap
   
