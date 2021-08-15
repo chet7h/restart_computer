@@ -169,8 +169,7 @@
 		</div>
 	</div>
 	<input type="hidden" name="device_id" value="1" id="device_id">
-	<input type="hidden" name="token" value="11111111111111111111111111111"
-		id="token">
+	<input type="hidden" name="token" th:value="${_csrf.token}" id="token">
 	<!-- Required Jquery -->
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js} "></script>
 	<script type="text/javascript"
