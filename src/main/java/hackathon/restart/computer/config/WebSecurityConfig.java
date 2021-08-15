@@ -1,4 +1,4 @@
-package hackathon.restart.computer.controller;
+package hackathon.restart.computer.config;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

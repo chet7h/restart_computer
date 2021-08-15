@@ -42,8 +42,6 @@ public class CustomUserDetailsService implements UserDetailsService{
                 grantList.add(authority);
             }
         }
-        UserDetails userDetails = (UserDetails) new User(users.getEmail(), //
-        		users.getPassword(), grantList);
-        return userDetails;
+        return new CustomUser(users, grantList);
     }
 }
