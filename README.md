@@ -6,7 +6,7 @@
   * Queue
   * Control:60%
   * Admin8823
-  * popup setmap4s
+  * popup setmap4sff
   
 ## Batch
 
