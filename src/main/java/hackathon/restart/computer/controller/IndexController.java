@@ -21,6 +21,6 @@ public class IndexController {
 	}
 	@RequestMapping(value = { "/403" })
 	public String error(@RequestParam(required = false) String message, final Model model) {
-		return "index";
+		return "";
 	}
 }
