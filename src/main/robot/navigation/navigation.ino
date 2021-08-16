@@ -4,7 +4,6 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 #include <L298NX2.h>
-#include <ESP8266httpUpdate.h>
 // ==================================================================================
 //                                     khai báo biến
 // ==================================================================================
@@ -13,7 +12,7 @@
 #define DEVICE_ID  "1"
 #define VERSION  "1.0.0"
 
-const String HOST = "http://192.168.1.6";
+const String HOST = "http://192.168.1.5";
 const int PORT = 8080;
 
 //WIFI
@@ -121,27 +120,6 @@ void loop() {
     case 4:    // tiến
       Serial.printf("tiến");
       motors.forward();
-      break;
-    case 999:    // update
-      Serial.printf("update");
-      WiFiClient client;
-      //t_httpUpdate_return ret = ESPhttpUpdate.update(client, "http://server/file.bin");
-      // Or:
-      t_httpUpdate_return ret = ESPhttpUpdate.update(client, "server", 8080, "file.bin");
-
-      switch (ret) {
-        case HTTP_UPDATE_FAILED:
-          Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s\n", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
-          break;
-
-        case HTTP_UPDATE_NO_UPDATES:
-          Serial.println("HTTP_UPDATE_NO_UPDATES");
-          break;
-
-        case HTTP_UPDATE_OK:
-          Serial.println("HTTP_UPDATE_OK");
-          break;
-      }
       break;
   }
 }
