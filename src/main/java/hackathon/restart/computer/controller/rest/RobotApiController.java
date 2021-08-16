@@ -82,5 +82,12 @@ public class RobotApiController {
 		}
 		return "1";
 	}
+	
+	public RobotInfo getRobotInfo(int deviceId, String token) {
+		if (deviceStatus.get(deviceId).getToken().equals(token)) {
+			return deviceStatus.get(deviceId);
+		}
+		return null;
+	}
 
 }
