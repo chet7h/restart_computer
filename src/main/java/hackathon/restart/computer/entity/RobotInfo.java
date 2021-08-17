@@ -26,6 +26,6 @@ public class RobotInfo {
 	private int armControl;
 
 	// token gắn trên robot
-	private String token;
+	private String secrect;
 
 }

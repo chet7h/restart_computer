@@ -11,13 +11,11 @@
 // mã thiết bị. mỗi room sẽ chưa 1 robot. nó là ID tron table [room_info]
 #define DEVICE_ID  "1"
 #define VERSION  "1.0.0"
-#define TOKEN  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+#define TOKEN  "1111111111111111111"
 
-//const String HOST = "http://baongochome.duckdns.org";
-//const int PORT = 11111;
-
-const String HOST = "http://192.168.1.5";
+const String HOST = "http://baongochome.duckdns.org";
 const int PORT = 11111;
+
 
 //WIFI
 ESP8266WiFiMulti WiFiMulti;

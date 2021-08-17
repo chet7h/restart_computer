@@ -39,7 +39,7 @@ public class ControlController {
 		int roomId = Integer.parseInt(userInfo.getRoom_id());
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
-		
+		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());
 		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);

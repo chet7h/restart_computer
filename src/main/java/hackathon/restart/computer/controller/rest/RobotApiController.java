@@ -22,6 +22,8 @@ public class RobotApiController {
 
 	// biến toàn cục, dùng như table, lưu vào memory tăng tốc đọ truy cập
 	private Map<Integer, RobotInfo> deviceStatus = new HashMap<>();
+	
+	private Map<Integer, String> tokenInfo = new HashMap<>();
 
 	@PostConstruct
 	private void initDeviceStatus() {
@@ -53,41 +55,46 @@ public class RobotApiController {
 	 */
 	@PostMapping("/setNavigate")
 	public void setNavigate(@RequestBody NavigateForm navigateForm) {
-		int navigateControl = navigateForm.getNavigateControl();
-		Integer trueValue[] = { 0, 1, 2, 3, 4 };
-		if (!Arrays.asList(trueValue).contains(navigateControl)) {
-			navigateControl = 0;
-		}
+		if (tokenInfo.get(navigateForm.getDeviceId()).equals(navigateForm.getToken())) {
+			int navigateControl = navigateForm.getNavigateControl();
+			Integer trueValue[] = { 0, 1, 2, 3, 4 };
+			if (!Arrays.asList(trueValue).contains(navigateControl)) {
+				navigateControl = 0;
+			}
 
-		int armControl = navigateForm.getArmControl();
-		Integer trueValueArm[] = { 0, 1, 2 };
-		if (!Arrays.asList(trueValueArm).contains(armControl)) {
-			armControl = 0;
-		}
+			int armControl = navigateForm.getArmControl();
+			Integer trueValueArm[] = { 0, 1, 2 };
+			if (!Arrays.asList(trueValueArm).contains(armControl)) {
+				armControl = 0;
+			}
 
-		RobotInfo robotInfo = deviceStatus.get(navigateForm.getDeviceId());
-		robotInfo.setNavigateControl(navigateControl);
-		robotInfo.setArmControl(armControl);
-		deviceStatus.put(navigateForm.getDeviceId(), robotInfo);
+			RobotInfo robotInfo = deviceStatus.get(navigateForm.getDeviceId());
+			robotInfo.setNavigateControl(navigateControl);
+			robotInfo.setArmControl(armControl);
+		}
 	}
 
 	@GetMapping("/updateWfAndBp")
 	public String updateWifiSignalBatteryPercentage(@RequestParam int deviceId, @RequestParam String token,
 			@RequestParam int wifiSignal, @RequestParam int batteryPercentage) {
-		if (deviceStatus.get(deviceId).getToken().equals(token)) {
+		if (deviceStatus.get(deviceId).getSecrect().equals(token)) {
 			RobotInfo robotInfo = deviceStatus.get(deviceId);
 			robotInfo.setWifiSignal(wifiSignal);
 			robotInfo.setBatteryPercentage(batteryPercentage);
-			return "0";
+			return deviceStatus.get(deviceId).getNavigateControl() + "-" + deviceStatus.get(deviceId).getArmControl();
 		}
-		return "1";
+		return "500";
 	}
 	
 	public RobotInfo getRobotInfo(int deviceId, String token) {
-		if (deviceStatus.get(deviceId).getToken().equals(token)) {
+		//if (deviceStatus.get(deviceId).getSecrect().equals(token)) {  --> gọi trược tiếp method nên không cần check token
 			return deviceStatus.get(deviceId);
-		}
-		return null;
+		//}
+		//return null;
+	}
+	
+	public String updateTokenToMemory(int roomId, String token) {
+		return tokenInfo.put(roomId, token);
 	}
 
 }
