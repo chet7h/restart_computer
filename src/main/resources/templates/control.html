@@ -266,7 +266,7 @@
 					token : $("#token").val()
 				}
 				$.ajax({
-					url : "/robot/setNavigate",
+					url : "[[@{/control/setNavigate}]]",
 					type : 'POST',
 					headers : headers,
 					contentType : "application/json",
@@ -284,7 +284,7 @@
 					token : $("#token").val()
 				}
 				$.ajax({
-					url : "/robot/setNavigate",
+					url : "[[@{/control/setNavigate}]]",
 					type : 'POST',
 					headers : headers,
 					contentType : "application/json",
@@ -302,7 +302,7 @@
 					token : $("#token").val()
 				}
 				$.ajax({
-					url : "/robot/setNavigate",
+					url : "[[@{/control/setNavigate}]]",
 					type : 'POST',
 					headers : headers,
 					contentType : "application/json",
@@ -320,7 +320,7 @@
 					token : $("#token").val()
 				}
 				$.ajax({
-					url : "/robot/setNavigate",
+					url : "[[@{/control/setNavigate}]]",
 					type : 'POST',
 					headers : headers,
 					contentType : "application/json",
@@ -338,7 +338,7 @@
 					token : $("#token").val()
 				}
 				$.ajax({
-					url : "/robot/setNavigate",
+					url : "[[@{/control/setNavigate}]]",
 					type : 'POST',
 					headers : headers,
 					contentType : "application/json",
@@ -367,7 +367,7 @@
 					token : $("#token").val()
 				}
 				$.ajax({
-					url : "/robot/setNavigate",
+					url : "[[@{/control/setNavigate}]]",
 					type : 'POST',
 					headers : headers,
 					contentType : "application/json",
@@ -381,7 +381,7 @@
 			setInterval(
 					function() {
 						$.ajax({
-							url : "/control/updateWfAndBp",
+							url : "[[@{/control/updateWfAndBp}]]",
 							type : 'POST',
 							headers : headers,
 							contentType : "application/x-www-form-urlencoded; charset=UTF-8",
@@ -411,7 +411,7 @@
 						if (isOverTime === "true") {
 							$
 							.ajax({
-								url : "/control/endControl",
+								url : "[[@{/control/endControl}]]",
 								type : 'POST',
 								headers : headers,
 								contentType : "application/x-www-form-urlencoded; charset=UTF-8",
@@ -424,7 +424,7 @@
 								}
 							});
 							window.location.href = "/login";
-						} 
+						}
 					}, 3000);
 		});
 	</script>
