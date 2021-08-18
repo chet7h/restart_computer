@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import hackathon.restart.computer.batch.enums.Flag;
 import lombok.Data;
 
 @Entity
@@ -20,6 +21,9 @@ public class RoomInfo {
 
 	@Column(name = "room_name")
 	private String roomName;
+	
+	@Column(name = "id_admin")
+	private Integer idAdmin;
 
 	@Column(name = "link_camera")
 	private String linkCamera;
@@ -31,7 +35,10 @@ public class RoomInfo {
 	private String bateryPercent;
 	
 	@Column(name = "stop_mode_flg")
-	private String stopModeFlg;
+	private Flag stopModeFlg;
+	
+	@Column(name = "send_sms_flg")
+	private Flag sendSmsFlg;
 	
 	@Column(name = "create_by_user")
 	private String create_by_user;

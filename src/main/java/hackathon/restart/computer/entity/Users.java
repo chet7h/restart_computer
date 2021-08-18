@@ -27,4 +27,7 @@ public class Users {
 
 	@Column(name = "room_id")
 	private String room_id;
+
+	@Column(name = "phone")
+	private String phone;
 }

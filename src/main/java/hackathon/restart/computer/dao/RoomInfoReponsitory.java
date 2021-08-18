@@ -21,4 +21,7 @@ public interface RoomInfoReponsitory extends JpaRepository<RoomInfo, Integer>  {
 	@Modifying()
 	@Query("update RoomInfo u set u.token = null, u.update_by_user = ?2, u.update_date =?3 where u.id = ?1")
 	int updateTokenRoom(int id, String user, LocalDateTime updateDate);
+
+	@Query("select u.phone from Users u inner join RoomInfo r on u.id=r.idAdmin where r.id = ?1")
+	String getPhoneAdminBayRoomID(int id);
 }
