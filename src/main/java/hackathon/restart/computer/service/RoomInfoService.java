@@ -53,7 +53,6 @@ public class RoomInfoService {
 				smsActionSupport.sendSMS(phoneAdmin,
 						"Low battery! " + roomInfo.getBateryPercent() + "%<br>Room name: " + roomInfo.getRoomName());
 				roomInfo.setSendSmsFlg(Flag.ON);
-				listRoomNomal.add(roomInfo);
 				roomInfo.setUpdate_by_user("batchRestartComputer");
 				roomInfo.setUpdate_date(LocalDateTime.now());
 
