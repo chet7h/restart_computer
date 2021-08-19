@@ -36,7 +36,7 @@ public class ControlController {
 		Users userInfo = loginedUser.getUsers();
 
 		//3. Get information
-		int roomId = Integer.parseInt(userInfo.getRoom_id());
+		int roomId = userInfo.getRoom_id();
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
 		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());

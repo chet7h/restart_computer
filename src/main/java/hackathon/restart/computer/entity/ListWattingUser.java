@@ -8,26 +8,22 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "users")
+@Table(name = "listwattinguser")
 @Data
-public class Users {
-
+public class ListWattingUser extends EnityCommon{
 	@Id
 	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "username")
-	private String username;
+	@Column(name = "user_id")
+	private int user_id;
 
-	@Column(name = "email")
-	private String email;
-
-	@Column(name = "password")
-	private String password;
-
+	@Column(name = "flagcontrol")
+	private boolean flagcontrol;
+	
 	@Column(name = "room_id")
 	private int room_id;
-
-	@Column(name = "phone")
-	private String phone;
+	
+	@Column(name = "token_room")
+	private String token_room;
 }

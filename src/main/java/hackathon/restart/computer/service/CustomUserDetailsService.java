@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import hackathon.restart.computer.dao.UserRepository;
 import hackathon.restart.computer.entity.Users;
-import org.springframework.security.core.userdetails.User;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService{

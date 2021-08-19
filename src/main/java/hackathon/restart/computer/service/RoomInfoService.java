@@ -72,5 +72,8 @@ public class RoomInfoService {
 		listRoomInfo.removeAll(listRoomNomal);
 		return roomInfoReponsitory.saveAll(listRoomInfo);
 	}
+	public int updateTokenRoom2(String token, String user, LocalDateTime updateDate, int id) {
+		return roomInfoReponsitory.updateTokenRoom2(token, user, updateDate,id);
+	}
 
 }

@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	
         // Nếu chưa login, nó sẽ redirect tới trang /login.
         http.authorizeRequests().antMatchers("/control").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')");
-        
+        http.authorizeRequests().antMatchers("/listWatingUser/**").access("hasAnyRole('ROLE_ADMIN','ROLE_USER')");
         // Trang chỉ dành cho ADMIN
         http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
         
@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Submit URL của trang login
         .loginProcessingUrl("/checkLogin") // Submit URL
         .loginPage("/login")//
-        .defaultSuccessUrl("/control")//
+        .defaultSuccessUrl("/listWatingUser")//
         .failureUrl("/login?message=error")//
         .usernameParameter("email")//
         .passwordParameter("password")
