@@ -87,7 +87,7 @@ public class ListWattingUserController {
 	}
 	private boolean isStopMode(int deviceId) {
 		RoomInfo roomInfo = roomInfoService.findById(deviceId).get();
-		if(roomInfo.getStopModeFlg().name().equals("OFF")) {
+		if("0".equals(roomInfo.getStopModeFlg())) {
 			return false;
 		}
 		return true;

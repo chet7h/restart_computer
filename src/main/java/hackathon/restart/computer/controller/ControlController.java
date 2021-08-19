@@ -1,5 +1,6 @@
 package hackathon.restart.computer.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
@@ -60,6 +61,14 @@ public class ControlController {
 		
 		RoomInfo roomInfo = roomInfoService.findById(Integer.parseInt(deviceId)).get();
 		model.addAttribute("isOverTime", isOverTime(10, LocalDateTime.now(), roomInfo.getUpdate_date()));
+		
+		// xu ly check pin robot va gui sms
+		try {
+			roomInfoService.checkPinRobotAndSenMsg(robotInfo);
+		} catch (IOException e) {
+			System.out.println("Send sms fail: " + e.getMessage());
+		}
+		
 		return "control :: content2";
 	}
 	

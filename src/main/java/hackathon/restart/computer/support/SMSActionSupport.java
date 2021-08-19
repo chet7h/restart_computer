@@ -1,4 +1,4 @@
-﻿package hackathon.restart.computer.batch.support;
+﻿package hackathon.restart.computer.support;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,17 +28,14 @@ public class SMSActionSupport {
 	
 	@Value("${smsSend.SecretKey}")
 	private String secretKey;
-	@Value("${smsSend.Brandname}")
-	private String brandname;
 
 	public String sendSMS(String phone, String message) throws IOException {
 
 		String url = "http://rest.esms.vn/MainService.svc/xml/SendMultipleMessage_V4_get?ApiKey=" 
 					+ URLEncoder.encode(aPIKey, "UTF-8") 
 					+ "&SecretKey=" + URLEncoder.encode(secretKey, "UTF-8") 
-					+ "&SmsType=2&Brandname=" + brandname + "&Phone=" + URLEncoder.encode(phone, "UTF-8") 
+					+ "&SmsType=8&Phone=" + URLEncoder.encode(phone, "UTF-8") 
 					+ "&Content=" + URLEncoder.encode(message, "UTF-8");
-		//De dang ky brandname rieng vui long lien he hotline 0901.888.484 hoac nhan vien kinh Doanh cua ban
 		URL obj;
 		try {
 			obj = new URL(url);

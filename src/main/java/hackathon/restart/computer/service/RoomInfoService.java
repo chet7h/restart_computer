@@ -2,17 +2,20 @@ package hackathon.restart.computer.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.ListUtils;
+import org.thymeleaf.util.StringUtils;
 
-import hackathon.restart.computer.batch.enums.Flag;
-import hackathon.restart.computer.batch.support.SMSActionSupport;
+import hackathon.restart.computer.dao.ListWattingUserRepository;
 import hackathon.restart.computer.dao.RoomInfoReponsitory;
+import hackathon.restart.computer.entity.RobotInfo;
 import hackathon.restart.computer.entity.RoomInfo;
+import hackathon.restart.computer.support.SMSActionSupport;
 
 @Service
 public class RoomInfoService {
@@ -21,6 +24,8 @@ public class RoomInfoService {
 	private RoomInfoReponsitory roomInfoReponsitory;
 	@Autowired
 	private SMSActionSupport smsActionSupport;
+	@Autowired
+	private ListWattingUserRepository listwattinguserRepository;
 
 	public Optional<RoomInfo> findByToken(String token) {
 		return roomInfoReponsitory.findByToken(token);
@@ -34,43 +39,58 @@ public class RoomInfoService {
 		return roomInfoReponsitory.updateTokenRoom(roomId, userUpdate, updateTime);
 	}
 
-	public List<RoomInfo> checkPinRobotAndSenMsg() throws IOException {
-		List<RoomInfo> listRoomInfo = roomInfoReponsitory.findAll();
-		List<RoomInfo> listRoomNomal = new ArrayList<>();
-
-		for (RoomInfo roomInfo : listRoomInfo) {
-			String phoneAdmin = roomInfoReponsitory.getPhoneAdminBayRoomID(roomInfo.getId());
-
-			if (Integer.parseInt(roomInfo.getBateryPercent()) <= 5 && roomInfo.getStopModeFlg() == Flag.OFF) {
-				roomInfo.setStopModeFlg(Flag.ON);
+	@Async("threadPoolTaskExecutor")
+	public void checkPinRobotAndSenMsg(RobotInfo robotInfo) throws IOException {
+		RoomInfo roomInfo = roomInfoReponsitory.findById(robotInfo.getDeviceId()).get();
+		// get phone admin of room
+		String phoneAdmin = roomInfoReponsitory.getPhoneAdminBayRoomID(roomInfo.getId());
+		// get list phon user waiting
+		List<String> listPhone = listwattinguserRepository.getPhoneUserWailtingByRoomId(robotInfo.getDeviceId());
+		boolean isUpdateRoom = false;
+		if (robotInfo.getBatteryPercentage() <= 5 && "0".equals(roomInfo.getStopModeFlg())) {
+			if(StringUtils.isEmpty(phoneAdmin)) {
 				smsActionSupport.sendSMS(phoneAdmin,
-						"Low battery! " + roomInfo.getBateryPercent() + "%<br>Room name: " + roomInfo.getRoomName());
-				roomInfo.setUpdate_by_user("batchRestartComputer");
-				roomInfo.setUpdate_date(LocalDateTime.now());
-
-			} else if (Integer.parseInt(roomInfo.getBateryPercent()) <= 20 && roomInfo.getStopModeFlg() == Flag.OFF
-					&& roomInfo.getSendSmsFlg() == Flag.OFF) {
-				smsActionSupport.sendSMS(phoneAdmin,
-						"Low battery! " + roomInfo.getBateryPercent() + "%<br>Room name: " + roomInfo.getRoomName());
-				roomInfo.setSendSmsFlg(Flag.ON);
-				roomInfo.setUpdate_by_user("batchRestartComputer");
-				roomInfo.setUpdate_date(LocalDateTime.now());
-
-			} else if (Integer.parseInt(roomInfo.getBateryPercent()) >= 40 && roomInfo.getStopModeFlg() == Flag.ON) {
-				roomInfo.setStopModeFlg(Flag.OFF);
-				smsActionSupport.sendSMS(phoneAdmin,
-						"Battery >= " + roomInfo.getBateryPercent() + "%<br>Room name: " + roomInfo.getRoomName());
-				roomInfo.setSendSmsFlg(Flag.OFF);
-				roomInfo.setUpdate_by_user("batchRestartComputer");
-				roomInfo.setUpdate_date(LocalDateTime.now());
-
-			} else {
-				listRoomNomal.add(roomInfo);
+						"Low battery! " + robotInfo.getBatteryPercentage() + "%<br>Room name: " + roomInfo.getRoomName());
 			}
+
+			roomInfo.setStopModeFlg("1");
+			roomInfo.setUpdate_by_user("batchRestartComputer");
+			roomInfo.setUpdate_date(LocalDateTime.now());
+			isUpdateRoom = true;
+
+		} else if (robotInfo.getBatteryPercentage() <= 20 && "0".equals(roomInfo.getStopModeFlg())
+				&& "0".equals(roomInfo.getSendSmsFlg())) {
+			if(StringUtils.isEmpty(phoneAdmin)) {
+				smsActionSupport.sendSMS(phoneAdmin,
+						"Low battery! " + robotInfo.getBatteryPercentage() + "%<br>Room name: " + roomInfo.getRoomName());
+			}
+			roomInfo.setSendSmsFlg("1");
+			roomInfo.setUpdate_by_user("batchRestartComputer");
+			roomInfo.setUpdate_date(LocalDateTime.now());
+			isUpdateRoom = true;
+
+		} else if (robotInfo.getBatteryPercentage() >= 40 && "1".equals(roomInfo.getStopModeFlg())) {
+			roomInfo.setStopModeFlg("0");
+
+			// send sms for user waiting
+			if (!ListUtils.isEmpty(listPhone)) {
+				for (String phone : listPhone) {
+					if(StringUtils.isEmpty(phone)) {
+						smsActionSupport.sendSMS(phone, "Robot is ready: Battery = " + robotInfo.getBatteryPercentage() + "%<br>Room name: "
+								+ roomInfo.getRoomName());
+					}
+				}
+			}
+
+			roomInfo.setSendSmsFlg("0");
+			roomInfo.setUpdate_by_user("batchRestartComputer");
+			roomInfo.setUpdate_date(LocalDateTime.now());
+			isUpdateRoom = true;
 		}
 
-		listRoomInfo.removeAll(listRoomNomal);
-		return roomInfoReponsitory.saveAll(listRoomInfo);
+		if (isUpdateRoom) {
+			roomInfoReponsitory.save(roomInfo);
+		}
 	}
 	public int updateTokenRoom2(String token, String user, LocalDateTime updateDate, int id) {
 		return roomInfoReponsitory.updateTokenRoom2(token, user, updateDate,id);
