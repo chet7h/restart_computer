@@ -1,10 +1,11 @@
 package hackathon.restart.computer.controller;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +23,8 @@ import hackathon.restart.computer.service.CustomUser;
 import hackathon.restart.computer.service.RoomInfoService;
 
 @Controller
-@RequestMapping("control")
-public class ControlController {
+@RequestMapping("admin/control")
+public class AdminControlController {
 
 	@Autowired
 	private RobotApiController robotApiController;
@@ -31,7 +32,9 @@ public class ControlController {
 	private RoomInfoService roomInfoService;
 	@Autowired
 	private ControlService controlService;
-
+	private static final String FLG_STOP = "1";
+	private static final String FLG_UNSTOP = "0";
+int count = 85;
 	@GetMapping({ "/", "" })
 	public String index(Model model, Principal principal) {
 		CustomUser loginedUser = (CustomUser) ((Authentication) principal).getPrincipal();
@@ -42,21 +45,24 @@ public class ControlController {
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
 		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());
+		
+		// Get select
+		List<RoomInfo> listRoomInfo = roomInfoService.findAllRoom();
+		
+		model.addAttribute("listRoomInfo", listRoomInfo);
 		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
-		
 		//4. Check is stop mode
-		model.addAttribute("isStopMode", controlService.isStopMode(roomId));
-		model.addAttribute("typePower", controlService.getTypePower(robotInfo.getBatteryPercentage(), robotInfo.getWifiSignal()));
-		
-		return "control";
+		return "tabs";
 	}
 	
 	@PostMapping("/updateWfAndBp")
 	public String reloadInforRobot(@RequestParam String deviceId, @RequestParam String token,Model model) {
 
 		RobotInfo robotInfo = robotApiController.getRobotInfo(Integer.parseInt(deviceId), token);
+		robotInfo.setBatteryPercentage(--count);
+
 		
 		model.addAttribute("typePower", controlService.getTypePower(robotInfo.getBatteryPercentage(), robotInfo.getWifiSignal()));
 		model.addAttribute("robotInfo", robotInfo);
@@ -64,24 +70,32 @@ public class ControlController {
 		
 		RoomInfo roomInfo = roomInfoService.findById(Integer.parseInt(deviceId)).get();
 		model.addAttribute("isOverTime", controlService.isOverTime(10, LocalDateTime.now(), roomInfo.getUpdate_date()));
-		
-		// xu ly check pin robot va gui sms
-		try {
-			roomInfoService.checkPinRobotAndSenMsg(robotInfo);
-		} catch (IOException e) {
-			System.out.println("Send sms fail: " + e.getMessage());
-		}
-		
-		return "control :: content2";
+		return "tabs :: content2";
 	}
 	
-	@PostMapping("/endControl")
-	public String endControl(@RequestParam String deviceId) {
-		//1. Update room
-		roomInfoService.updateTokenRoom(Integer.parseInt(deviceId), "Page Control", LocalDateTime.now());
-		
-		return "redirect:/login";
+	@PostMapping("/stopMode")
+	public ResponseEntity<String> stopMode(@RequestParam String deviceId) {
+
+		roomInfoService.updateFlgMode(FLG_STOP, Integer.parseInt(deviceId), "Page Admin", LocalDateTime.now());
+		return ResponseEntity.ok("Update successfully");
 	}
+	
+	@PostMapping("/turnOnMode")
+	public ResponseEntity<String> turnOnMode(@RequestParam String deviceId) {
 
-
+		roomInfoService.updateFlgMode(FLG_UNSTOP,Integer.parseInt(deviceId), "Page Admin", LocalDateTime.now());
+		return ResponseEntity.ok("Update successfully");
+	}
+	
+	@PostMapping("/selectRoom")
+	public String selectRoom(@RequestParam String roomId, Model model) {
+		int idRoom = Integer.parseInt(roomId);
+		RoomInfo roomInfo = roomInfoService.findById(idRoom).get();
+		RobotInfo robotInfo = robotApiController.getRobotInfo(idRoom, roomInfo.getToken());
+		
+		robotApiController.updateTokenToMemory(idRoom, roomInfo.getToken());
+		model.addAttribute("roomInfo", roomInfo);
+		model.addAttribute("robotInfo", robotInfo);
+		return "tabs :: monitor";
+	}
 }

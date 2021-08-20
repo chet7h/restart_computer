@@ -17,4 +17,8 @@ public class ListWattingUserService{
 	public int deleteWattingUser(int id) {
 		return wattingUserRepository.deleteWattingUser(id);
 	}
+	
+	public Integer deleteWattingUserControl(int room_id) {
+		return wattingUserRepository.deleteWattingUserControl(room_id);
+	}
 }

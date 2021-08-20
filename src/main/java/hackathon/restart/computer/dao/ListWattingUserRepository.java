@@ -21,4 +21,9 @@ public interface ListWattingUserRepository extends JpaRepository<ListWattingUser
 	
 	@Query("SELECT u.phone FROM Users u inner join ListWattingUser uw ON u.id = uw.user_id WHERE uw.room_id = ?1 ORDER BY uw.create_date ASC")
 	List<String> getPhoneUserWailtingByRoomId(int roomId);
+	
+	@Transactional
+	@Modifying
+	@Query("delete from ListWattingUser b where b.room_id=?1 and b.flagcontrol=1")
+	Integer deleteWattingUserControl(int room_id);
 }

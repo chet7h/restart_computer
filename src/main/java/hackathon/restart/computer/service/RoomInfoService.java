@@ -96,4 +96,11 @@ public class RoomInfoService {
 		return roomInfoReponsitory.updateTokenRoom2(token, user, updateDate,id);
 	}
 
+	public int updateFlgMode(String flg, int roomId, String userUpdate, LocalDateTime updateTime) {
+		return roomInfoReponsitory.updateFlgMode(flg, roomId, userUpdate, updateTime);
+	}
+	
+	public List<RoomInfo> findAllRoom(){
+		return roomInfoReponsitory.findAll();
+	}
 }

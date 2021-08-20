@@ -47,4 +47,7 @@ public class RoomInfo {
 
 	@Column(name = "create_date")
 	private LocalDateTime create_date;
+	
+	@Column(name = "user_control")
+	private String user_control;
 }
