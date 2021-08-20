@@ -40,6 +40,11 @@ public class ControlController {
 		//3. Get information
 		int roomId = userInfo.getRoom_id();
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
+		
+		// Check access control
+		if(!userInfo.getUsername().equals(roomInfo.getUpdate_by_user())) {
+			return "redirect:/listWatingUser";
+		}
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
 		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());
 		model.addAttribute("userInfo", userInfo);
@@ -79,9 +84,8 @@ public class ControlController {
 	public String endControl(@RequestParam String deviceId) {
 		//1. Update room
 		roomInfoService.updateTokenRoom(Integer.parseInt(deviceId), "Page Control", LocalDateTime.now());
-		
+
 		return "redirect:/login";
 	}
-
 
 }
