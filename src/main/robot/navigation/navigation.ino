@@ -29,6 +29,17 @@ const unsigned int IN2_B = D6;
 
 // Initialize both motors
 L298NX2 motors(IN1_A, IN2_A, IN1_B, IN2_B);
+
+// relay
+const int relay1 = D4;
+const int relay2 = D7;
+// do pin
+int analogInput = 0;
+float vout = 0.0;
+
+float R1 = 100000.0; // resistance of R1 (100K)
+float R2 = 10000.0; // resistance of R2 (10K)
+int value = 0;
 // ======================================END=========================================
 
 
@@ -49,11 +60,17 @@ void setup() {
 
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP("Baongoc", "baongoc@2018");
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  digitalWrite(relay1, HIGH);
+  digitalWrite(relay2, LOW);
 
+  pinMode(analogInput, INPUT);
 }
 
 // khởi tạo là stop
 int status = 0;
+int armControl = 0;
 int count = 0;
 void loop() {
   // wait for WiFi connection
@@ -65,7 +82,7 @@ void loop() {
 
     Serial.print("[HTTP] begin...\n");
     String link_get =  HOST + ":" + PORT + "/hackathon/robot?deviceId=" + DEVICE_ID + "&token=" + TOKEN;
-    String link_update = HOST + ":" + PORT + "/hackathon/robot/updateWfAndBp?deviceId=" + DEVICE_ID + "&token=" + TOKEN + "&wifiSignal=" + WiFi.RSSI() + "&batteryPercentage=" + 100;
+    String link_update = HOST + ":" + PORT + "/hackathon/robot/updateWfAndBp?deviceId=" + DEVICE_ID + "&token=" + TOKEN + "&wifiSignal=" + WiFi.RSSI() + "&batteryPercentage=" + getBatteryPercentage();
     String link = "";
     count ++;
     if (count > 50) {
@@ -83,17 +100,19 @@ void loop() {
       // httpCode will be negative on error
       if (httpCode > 0) {
         // HTTP header has been send and Server response header has been handled
-        Serial.printf("[HTTP] GET... code: %d ", httpCode);
+        //Serial.printf("[HTTP] GET... code: %d ", httpCode);
 
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
-          status = http.getString().substring(1, 2).toInt();
+          status = http.getString().substring(0, 1).toInt();
+          armControl = http.getString().substring(2, 3).toInt();
           Serial.printf("status: %d ", status);
         }
       } else {
         Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
         //không thể kết nói với server thì set là stop
         status = 0;
+        armControl= 0;
       }
 
       http.end();
@@ -101,6 +120,7 @@ void loop() {
       Serial.printf("[HTTP} Unable to connect\n");
       //không thể kết nói với server thì set là stop
       status = 0;
+      armControl= 0;
     }
   }
 
@@ -130,4 +150,38 @@ void loop() {
       motors.forward();
       break;
   }
+
+  //armControl
+    switch (armControl) {
+    case 0:    // stop
+      Serial.println("stop");
+      digitalWrite(relay1, HIGH);
+      digitalWrite(relay2, LOW);
+      break;
+    case 1:    // lên
+      Serial.println("lên");
+      digitalWrite(relay1, LOW);
+      digitalWrite(relay2, LOW);
+      break;
+    case 2:    // xuống
+      Serial.println("stop");
+      digitalWrite(relay1, HIGH);
+      digitalWrite(relay2, HIGH);
+      break;
+    }
+}
+
+int getBatteryPercentage(){
+  float vin = 0.0;
+  // read the value at analog input
+  value = analogRead(analogInput);
+  vout = (value * 5) / 1024.0;
+  vin = vout / (R2 / (R1 + R2));
+  
+  if (vin < 0.09)
+  {
+    vin = 0.0;
+  }
+  Serial.println(vin);
+  return (int)((vin/12)*100);
 }
