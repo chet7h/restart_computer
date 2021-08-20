@@ -43,11 +43,12 @@ public class RoomInfoService {
 	public void checkPinRobotAndSenMsg(RobotInfo robotInfo) throws IOException {
 		RoomInfo roomInfo = roomInfoReponsitory.findById(robotInfo.getDeviceId()).get();
 		// get phone admin of room
-		String phoneAdmin = roomInfoReponsitory.getPhoneAdminBayRoomID(roomInfo.getId());
+		String phoneAdmin;
 		// get list phon user waiting
-		List<String> listPhone = listwattinguserRepository.getPhoneUserWailtingByRoomId(robotInfo.getDeviceId());
+		List<String> listPhone;
 		boolean isUpdateRoom = false;
 		if (robotInfo.getBatteryPercentage() <= 5 && "0".equals(roomInfo.getStopModeFlg())) {
+			phoneAdmin = roomInfoReponsitory.getPhoneAdminBayRoomID(roomInfo.getId());
 			if(!StringUtils.isEmpty(phoneAdmin)) {
 				smsActionSupport.sendSMS(phoneAdmin,
 						"Low battery! " + robotInfo.getBatteryPercentage() + "%<br>Room name: " + roomInfo.getRoomName());
@@ -60,6 +61,7 @@ public class RoomInfoService {
 
 		} else if (robotInfo.getBatteryPercentage() <= 20 && "0".equals(roomInfo.getStopModeFlg())
 				&& "0".equals(roomInfo.getSendSmsFlg())) {
+			phoneAdmin = roomInfoReponsitory.getPhoneAdminBayRoomID(roomInfo.getId());
 			if(!StringUtils.isEmpty(phoneAdmin)) {
 				smsActionSupport.sendSMS(phoneAdmin,
 						"Low battery! " + robotInfo.getBatteryPercentage() + "%<br>Room name: " + roomInfo.getRoomName());
@@ -70,8 +72,7 @@ public class RoomInfoService {
 			}
 
 		} else if (robotInfo.getBatteryPercentage() >= 40 && "1".equals(roomInfo.getStopModeFlg())) {
-			roomInfo.setStopModeFlg("0");
-
+			listPhone = listwattinguserRepository.getPhoneUserWailtingByRoomId(robotInfo.getDeviceId());
 			// send sms for user waiting
 			if (!ListUtils.isEmpty(listPhone)) {
 				for (String phone : listPhone) {
@@ -82,6 +83,7 @@ public class RoomInfoService {
 				}
 			}
 
+			roomInfo.setStopModeFlg("0");
 			roomInfo.setSendSmsFlg("0");
 			roomInfo.setUpdate_by_user("batchRestartComputer");
 			roomInfo.setUpdate_date(LocalDateTime.now());
