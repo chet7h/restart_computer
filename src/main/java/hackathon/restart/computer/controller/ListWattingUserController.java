@@ -4,7 +4,9 @@ import java.security.Principal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hackathon.restart.computer.dto.RstListWattingUserDto;
+import hackathon.restart.computer.entity.ListWattingUser;
 import hackathon.restart.computer.entity.RoomInfo;
 import hackathon.restart.computer.entity.Users;
 import hackathon.restart.computer.service.CustomUser;
@@ -40,15 +43,42 @@ public class ListWattingUserController {
 	
 	@RequestMapping(value = { "/", ""})
 	public String listWatingUser(Model model, Principal principal) {
+		boolean flagControl = false;
 		CustomUser loginedUser = (CustomUser) ((Authentication) principal).getPrincipal();
 		Users userInfo = loginedUser.getUsers();
 		int roomId = userInfo.getRoom_id();
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		// get list user watting
 		List<RstListWattingUserDto> listUserWatting = usersService.listUserWattingByRoom(roomId);
+		if(listUserWatting.isEmpty() && roomInfo.getToken() == null) {
+			//không có ai điều khiển
+			//updated token of roominfo
+			roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(), userInfo.getUsername(), LocalDateTime.now(), roomId);
+			return "redirect:/control";
+		}else {
+			// check userLogin in list watting.
+			List<Integer> listIdUserWatting = new ArrayList<>();
+			for(RstListWattingUserDto listWattingUserDto: listUserWatting) {
+				listIdUserWatting.add(listWattingUserDto.getId());
+			}
+			if(listIdUserWatting.contains(userInfo.getId())) {
+				// có trong danh sách đợi không add nữa
+			} else {
+				ListWattingUser userWatting = new ListWattingUser();
+				userWatting.setFlagcontrol(false);
+				userWatting.setUser_id(userInfo.getId());
+				userWatting.setCreate_by_user(userInfo.getUsername());
+				userWatting.setCreate_date(LocalDate.now());
+				userWatting.setRoom_id(roomId);
+				// Add user in ListWatting
+				listWattingUserService.insertWattingUser(userWatting);
+			}
+		}
+		// re-get list watting 
+		listUserWatting = usersService.listUserWattingByRoom(roomId);
 		// time watting
 		model.addAttribute("timeWatting", convertSecondTime(getTimeWatting(listUserWatting, userInfo)*TIMEWATTINGCONTROLL*60));
-		model.addAttribute("flagControl", false);
+		model.addAttribute("flagControl", flagControl);
 		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("listUserWatting", listUserWatting);
 		model.addAttribute("roomInfo", roomInfo);
@@ -57,9 +87,8 @@ public class ListWattingUserController {
 		return "listWatingUser";
 	}
 	@PostMapping("/updatedListWattingUser")
-	public String updatedListWattingUser(Model model,Principal principal,@RequestParam String timeWatting) throws ParseException {
+	public String updatedListWattingUser(Model model,Principal principal,@RequestParam String timeWatting, boolean flagControl) throws ParseException {
 		//this.listWatingUser(model,principal);
-		boolean flagControl =false;
 		CustomUser loginedUser = (CustomUser) ((Authentication) principal).getPrincipal();
 		Users userInfo = loginedUser.getUsers();
 		int roomId = userInfo.getRoom_id();
@@ -70,11 +99,12 @@ public class ListWattingUserController {
 			if(listUserWatting.get(0).getId().equals(userInfo.getId()) && listUserWatting.get(0).isFlagcontrol()){
 				//deleted user này ra khỏi danh sách đợi
 				listWattingUserService.deleteWattingUser(listUserWatting.get(0).getId_watting());
-				
 				//updated token of roominfo
 				roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(), userInfo.getUsername(), LocalDateTime.now(), roomId);
 				flagControl = listUserWatting.get(0).isFlagcontrol();
 			}
+		} else {
+			//roomInfoService.updateTokenRoom2(null, userInfo.getUsername(), LocalDateTime.now(), roomId);
 		}
 		model.addAttribute("timeWatting", convertSecondTime(convertTime(timeWatting)));
 		model.addAttribute("flagControl", flagControl);

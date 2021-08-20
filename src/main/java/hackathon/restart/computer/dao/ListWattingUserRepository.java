@@ -1,6 +1,7 @@
 package hackathon.restart.computer.dao;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,24 @@ public interface ListWattingUserRepository extends JpaRepository<ListWattingUser
 	@Modifying
 	@Query("delete from ListWattingUser b where b.room_id=?1 and b.flagcontrol=1")
 	Integer deleteWattingUserControl(int room_id);
+	
+	/*
+	 * @Transactional
+	 * 
+	 * @Modifying
+	 * 
+	 * @Query("insert into ListWattingUser l(l.id,l.user_id,l.room_id,l.flagcontrol,l.tokenroom,l.create_by_user,l.update_by_user,l.update_date,l.create_date) values (?1,?2,?3,?4,?5,?6,?7,?8,?9)"
+	 * ) Integer insertWattingUser(int id,int user_id, boolean flagcontrol, String
+	 * tokenroom, String create_by_user,String update_by_user,LocalDateTime
+	 * update_date,LocalDateTime create_date);
+	 */
+	<S extends ListWattingUser> S save(S entity);
+	
+	@Transactional
+	@Modifying()
+	@Query("update ListWattingUser u set u.flagcontrol = 1 where u.id = ?1")
+	int updateFlagControl(int id);
+	
+	
+	
 }

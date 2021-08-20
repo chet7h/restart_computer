@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
     <title>Material Able bootstrap admin template by Codedthemes</title>
@@ -192,13 +194,13 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLongTitle">Message</h5>
-						</button>
 					</div>
 					<div class="modal-body">Thiết bị đang bị gián đoạn. Vui lòng
 						chờ trong giây lát</div>
 					<div class="modal-footer"></div>
 				</div>
 			</div>
+		</div>
 		</div>
 		<!-- Required Jquery -->
     <script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
@@ -227,7 +229,8 @@
 					headers : headers,
 					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 					data : {
-						timeWatting : $("#timeWatting").text()
+						timeWatting : $("#timeWatting").text(),
+						flagControl : $("#flagControl").val()
 					},
 					dataType : 'html',
 					success : function(result) {
