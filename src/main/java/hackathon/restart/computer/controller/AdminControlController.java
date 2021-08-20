@@ -34,7 +34,7 @@ public class AdminControlController {
 	private ControlService controlService;
 	private static final String FLG_STOP = "1";
 	private static final String FLG_UNSTOP = "0";
-int count = 85;
+
 	@GetMapping({ "/", "" })
 	public String index(Model model, Principal principal) {
 		CustomUser loginedUser = (CustomUser) ((Authentication) principal).getPrincipal();
@@ -45,7 +45,7 @@ int count = 85;
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
 		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());
-		
+
 		// Get select
 		List<RoomInfo> listRoomInfo = roomInfoService.findAllRoom();
 		
@@ -61,8 +61,6 @@ int count = 85;
 	public String reloadInforRobot(@RequestParam String deviceId, @RequestParam String token,Model model) {
 
 		RobotInfo robotInfo = robotApiController.getRobotInfo(Integer.parseInt(deviceId), token);
-		robotInfo.setBatteryPercentage(--count);
-
 		
 		model.addAttribute("typePower", controlService.getTypePower(robotInfo.getBatteryPercentage(), robotInfo.getWifiSignal()));
 		model.addAttribute("robotInfo", robotInfo);
