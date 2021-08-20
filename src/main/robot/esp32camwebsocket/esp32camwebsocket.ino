@@ -29,8 +29,8 @@
 
 // Replace with your network credentials
 const char* hostname = "ESP32CAM";
-const char* ssid = "Khu c";
-const char* password = "123456790";
+const char* ssid = "Baongoc";
+const char* password = "baongoc@2018";
 
 WebSocketsClient webSocket;
 
@@ -117,7 +117,7 @@ void setup(){
   setupCamera();
   
   // server address, port and URL
-  webSocket.begin("192.168.1.5", 3000, "/jpgstream_server");
+  webSocket.begin("baongochome.duckdns.org", 3000, "/jpgstream_server");
   webSocket.onEvent(webSocketEvent);
   webSocket.setReconnectInterval(5000);
   webSocket.enableHeartbeat(15000, 3000, 2); 
