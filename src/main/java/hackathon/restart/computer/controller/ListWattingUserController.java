@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.util.StringUtils;
 
 import hackathon.restart.computer.dto.RstListWattingUserDto;
 import hackathon.restart.computer.entity.ListWattingUser;
@@ -50,7 +51,7 @@ public class ListWattingUserController {
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		// get list user watting
 		List<RstListWattingUserDto> listUserWatting = usersService.listUserWattingByRoom(roomId);
-		if(listUserWatting.isEmpty() && roomInfo.getToken() == null) {
+		if(listUserWatting.isEmpty() && StringUtils.isEmpty(roomInfo.getToken())) {
 			//không có ai điều khiển
 			//updated token of roominfo
 			roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(), userInfo.getUsername(), LocalDateTime.now(), roomId);
