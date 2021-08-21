@@ -41,7 +41,9 @@ public class RobotApiController {
 	 */
 	@GetMapping({ "/", "" })
 	public String navigate(@RequestParam int deviceId) {
-		return deviceStatus.get(deviceId).getNavigateControl() + "-" + deviceStatus.get(deviceId).getArmControl();
+		String output = deviceStatus.get(deviceId).getNavigateControl() + "-" + deviceStatus.get(deviceId).getArmControl();
+		deviceStatus.get(deviceId).setArmControl(0);
+		return output;
 	}
 
 	/**
@@ -81,7 +83,9 @@ public class RobotApiController {
 			RobotInfo robotInfo = deviceStatus.get(deviceId);
 			robotInfo.setWifiSignal(wifiSignal);
 			robotInfo.setBatteryPercentage(batteryPercentage);
-			return deviceStatus.get(deviceId).getNavigateControl() + "-" + deviceStatus.get(deviceId).getArmControl();
+			String output = deviceStatus.get(deviceId).getNavigateControl() + "-" + deviceStatus.get(deviceId).getArmControl();
+			robotInfo.setArmControl(0);
+			return output;
 		}
 		return "500";
 	}

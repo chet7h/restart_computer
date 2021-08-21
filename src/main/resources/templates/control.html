@@ -151,7 +151,7 @@
 																	</button></td>
 																<td></td>
 																<td></td>
-																<td><button data-arm="2"
+																<td><button data-arm="1"
 																		class="btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-up"></i>
 																	</button></td>
@@ -199,8 +199,9 @@
 													</div>
 													<div class="card-block h-600">
 														<!-- button Default -->
-														<img class="rounded mx-auto d-block" id="stream"
-															th:src="${roomInfo.linkCamera}">
+<!-- 														<img class="rounded mx-auto d-block" id="stream" -->
+<!-- 															th:src="${roomInfo.linkCamera}"> -->
+															<iframe th:src="${roomInfo.linkCamera}" style="width: 338px; height: 338px; border:none"></iframe>
 													</div>
 												</div>
 											</div>
@@ -263,192 +264,201 @@
 		$(document).keypress(function(event) {
 
 			var keycode = (event.keyCode ? event.keyCode : event.which);
-			if (keycode == '119') {
-				let formData = {
+			let formData;
+			switch (keycode) {
+			case 119:
+				formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '4',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '97') {
-				let formData = {
+				break;
+			case 97:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '1',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '100') {
-				let formData = {
+				break;
+			case 100:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '2',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '120') {
-				let formData = {
+				break;
+			case 120:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '3',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '115') {
-				let formData = {
+				break;
+			case 115:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '0',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-		});
-		$(document).ready(function() {
-
-			$('[data-toggle="popover"]').popover({
-				html : true,
-				content : function() {
-					return $('#primary-popover-content').html();
-				}
-			});
-
-			// CONTROL BUTTON
-			$("button").click(function() {
-				let formData = {
+				break;
+			case 112:
+				 formData = {
 					deviceId : $("#device_id").val(),
-					navigateControl : $(this).data('navigate'),
-					armControl : $(this).data('arm'),
+					navigateControl : '0',
+					armControl : '1',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
+				break;
+
+			case 108:
+				 formData = {
+					deviceId : $("#device_id").val(),
+					navigateControl : '0',
+					armControl : '2',
+					token : $("#token").val()
+				}
+				break;
+			default:
+				 formData = {
+					deviceId : $("#device_id").val(),
+					navigateControl : '0',
+					armControl : '0',
+					token : $("#token").val()
+				}
+				break;
+			}
+			$.ajax({
+				url : "[[@{/robot/setNavigate}]]",
+				type : 'POST',
+				headers : headers,
+				contentType : "application/json",
+				data : JSON.stringify(formData),
+				dataType : 'json',
+				success : function(result) {
+				}
 			});
-			
-			$("#outRoom").click(function() {
-				$.ajax({
-					url : "[[@{/control/endControl}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-					data : {
-						deviceId : $("#device_id").val(),
-					},
-					dataType : 'html',
-					success : function(result) {
-						window.location.href = "/hackathon/login";
-					}
-				});
-			});
-
-
-			setInterval(
-					function() {
-						$.ajax({
-							url : "[[@{/control/updateWfAndBp}]]",
-							type : 'POST',
-							headers : headers,
-							contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-							data : {
-								deviceId : $("#device_id").val(),
-								token : $("#token").val()
-							},
-							dataType : 'html',
-							success : function(result) {
-								$("#content").html(result);
-							}
-
-						});
-
-						var stopMode = $("#stopMode").val();
-						if (stopMode === "true") {
-							$('#exampleModalCenter').modal({
-								backdrop : 'static',
-								keyboard : false,
-								show : true
-							});
-						} else {
-							$('#exampleModalCenter').modal('hide');
-						}
-						
-					 var isOverTime = $("#expireTime").val();
-						if (isOverTime === "true") {
-							$
-							.ajax({
-								url : "[[@{/control/endControl}]]",
-								type : 'POST',
-								headers : headers,
-								contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-								data : {
-									deviceId : $("#device_id").val(),
-									token : $("#token").val()
-								},
-								dataType : 'json',
-								success : function(result) {
-								}
-							});
-							window.location.href = "/hackathon/login";
-						} 
-					}, 3000);
 		});
+		$(document)
+				.ready(
+						function() {
+
+							$('[data-toggle="popover"]')
+									.popover(
+											{
+												html : true,
+												content : function() {
+													return $(
+															'#primary-popover-content')
+															.html();
+												}
+											});
+
+							// CONTROL BUTTON
+							$("button").click(function() {
+								let formData = {
+									deviceId : $("#device_id").val(),
+									navigateControl : $(this).data('navigate'),
+									armControl : $(this).data('arm'),
+									token : $("#token").val()
+								}
+								$.ajax({
+									url : "[[@{/robot/setNavigate}]]",
+									type : 'POST',
+									headers : headers,
+									contentType : "application/json",
+									data : JSON.stringify(formData),
+									dataType : 'json',
+									success : function(result) {
+									}
+								});
+							});
+
+							$("#outRoom")
+									.click(
+											function() {
+												$
+														.ajax({
+															url : "[[@{/control/endControl}]]",
+															type : 'POST',
+															headers : headers,
+															contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+															data : {
+																deviceId : $(
+																		"#device_id")
+																		.val(),
+															},
+															dataType : 'html',
+															success : function(
+																	result) {
+																window.location.href = "/hackathon/login";
+															}
+														});
+											});
+
+							setInterval(
+									function() {
+										$
+												.ajax({
+													url : "[[@{/control/updateWfAndBp}]]",
+													type : 'POST',
+													headers : headers,
+													contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+													data : {
+														deviceId : $(
+																"#device_id")
+																.val(),
+														token : $("#token")
+																.val()
+													},
+													dataType : 'html',
+													success : function(result) {
+														$("#content").html(
+																result);
+													}
+
+												});
+
+										var stopMode = $("#stopMode").val();
+										if (stopMode === "tcrue") {
+											$('#exampleModalCenter').modal({
+												backdrop : 'static',
+												keyboard : false,
+												show : true
+											});
+										} else {
+											$('#exampleModalCenter').modal(
+													'hide');
+										}
+
+										var isOverTime = $("#expireTime").val();
+										if (isOverTime === "trcue") {
+											$
+													.ajax({
+														url : "[[@{/control/endControl}]]",
+														type : 'POST',
+														headers : headers,
+														contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+														data : {
+															deviceId : $(
+																	"#device_id")
+																	.val(),
+															token : $("#token")
+																	.val()
+														},
+														dataType : 'json',
+														success : function(
+																result) {
+														}
+													});
+											window.location.href = "/hackathon/login";
+										}
+									}, 3000);
+						});
 	</script>
 	<script type="text/javascript" th:src="@{/js/script.js}"></script>
 </body>

@@ -55,7 +55,7 @@ server.on('upgrade', function upgrade(request, socket, head) {
 
 
 
-app.get('/token=robot00000010021212', (req, res) => {
+app.get('/token=000000000001', (req, res) => {
   	res.render('index', {});
 });
 

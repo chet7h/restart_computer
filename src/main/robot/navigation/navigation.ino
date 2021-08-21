@@ -91,6 +91,7 @@ void loop() {
     } else {
       link =  link_get;
     }
+    //    link = link_update;
     if (http.begin(client, link)) { // HTTP
 
       Serial.println(link);
@@ -112,7 +113,7 @@ void loop() {
         Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
         //không thể kết nói với server thì set là stop
         status = 0;
-        armControl= 0;
+        armControl = 0;
       }
 
       http.end();
@@ -120,7 +121,7 @@ void loop() {
       Serial.printf("[HTTP} Unable to connect\n");
       //không thể kết nói với server thì set là stop
       status = 0;
-      armControl= 0;
+      armControl = 0;
     }
   }
 
@@ -133,13 +134,13 @@ void loop() {
       break;
     case 1:    // trái
       Serial.println("trái");
-      motors.forwardA();
-      motors.backwardB();
+      motors.forwardB();
+      motors.backwardA();
       break;
     case 2:    // phải
       Serial.println("phải");
-      motors.forwardB();
-      motors.backwardA();
+      motors.forwardA();
+      motors.backwardB();
       break;
     case 3:    // lùi
       Serial.println("lùi");
@@ -152,7 +153,7 @@ void loop() {
   }
 
   //armControl
-    switch (armControl) {
+  switch (armControl) {
     case 0:    // stop
       Serial.println("stop");
       digitalWrite(relay1, HIGH);
@@ -160,28 +161,35 @@ void loop() {
       break;
     case 1:    // lên
       Serial.println("lên");
-      digitalWrite(relay1, LOW);
+      digitalWrite(relay1, HIGH);
+      digitalWrite(relay2, HIGH);
+      delay(20);
+      digitalWrite(relay1, HIGH);
       digitalWrite(relay2, LOW);
       break;
     case 2:    // xuống
-      Serial.println("stop");
+      Serial.println("xuống");
+      digitalWrite(relay1, LOW);
+      digitalWrite(relay2, LOW);
+
+      delay(20);
       digitalWrite(relay1, HIGH);
-      digitalWrite(relay2, HIGH);
+      digitalWrite(relay2, LOW);
       break;
-    }
+  }
 }
 
-int getBatteryPercentage(){
+int getBatteryPercentage() {
   float vin = 0.0;
   // read the value at analog input
   value = analogRead(analogInput);
   vout = (value * 5) / 1024.0;
   vin = vout / (R2 / (R1 + R2));
-  
+
   if (vin < 0.09)
   {
     vin = 0.0;
   }
   Serial.println(vin);
-  return (int)((vin/12)*100);
+  return (int)((vin / 12) * 100);
 }
