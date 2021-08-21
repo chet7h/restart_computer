@@ -234,7 +234,7 @@
 			</div>
 		</div>
 	</div>
-	<input type="hidden" th:value="${roomInfo.update_date}"
+	<input type="hidden" th:value="${timeControl}"
 		id="timeControl" name="timeControl">
 	<input type="hidden" name="device_id" th:value="${robotInfo.deviceId}"
 		id="device_id">
@@ -263,12 +263,11 @@
 		var csrfToken = $("meta[name='_csrf']").attr("content");
 		var headers = {};
 		headers[csrfHeader] = csrfToken;
-		
 		var countDownDate = $("#timeControl").val();
 		setInterval(
 				function() {
 					var now = new Date().getTime();
-					var distance =  Date.parse(countDownDate) + 10000 * 60 - now;
+					var distance =  Date.parse(countDownDate) - now;
 					var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 					var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 					document.getElementById("time").innerHTML = minutes + " : " + seconds;

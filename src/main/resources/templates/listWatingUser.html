@@ -1,200 +1,215 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-    <title>List queue</title>
-    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 10]>
+<title>List queue</title>
+<!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 10]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js}"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js}"></script>
       <![endif]-->
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta th:name="_csrf" th:content="${_csrf.token}" />
-	<meta th:name="_csrf_header" th:content="${_csrf.headerName}" />
+<!-- Meta -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta th:name="_csrf" th:content="${_csrf.token}" />
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}" />
 
-    <meta name="keywords" content="bootstrap, bootstrap admin template, admin theme, admin dashboard, dashboard template, admin template, responsive" />
-    <meta name="author" content="Codedthemes" />
-    <!-- Favicon icon -->
-    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
-    <!-- waves.css -->
-    <link rel="stylesheet" th:href="@{/pages/waves/css/waves.min.css}" type="text/css" media="all">
-    <!-- Required Fremwork -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/css/bootstrap.min.css}">
-    <!-- waves.css -->
-    <link rel="stylesheet" th:href="@{/pages/waves/css/waves.min.css}" type="text/css" media="all">
-    <!-- themify-icons line icon -->
-    <link rel="stylesheet" type="text/css" th:href="@{/icon/themify-icons/themify-icons.css}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" th:href="@{/icon/font-awesome/css/font-awesome.min.css}">
-    <!-- ico font -->
-    <link rel="stylesheet" type="text/css" th:href="@{/icon/icofont/css/icofont.css}">
-    <!-- Style.css -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/jquery.mCustomScrollbar.css}">
+<meta name="keywords"
+	content="bootstrap, bootstrap admin template, admin theme, admin dashboard, dashboard template, admin template, responsive" />
+<meta name="author" content="Codedthemes" />
+<!-- Favicon icon -->
+<link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+<link
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
+	rel="stylesheet">
+<!-- waves.css -->
+<link rel="stylesheet" th:href="@{/pages/waves/css/waves.min.css}"
+	type="text/css" media="all">
+<!-- Required Fremwork -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap/css/bootstrap.min.css}">
+<!-- waves.css -->
+<link rel="stylesheet" th:href="@{/pages/waves/css/waves.min.css}"
+	type="text/css" media="all">
+<!-- themify-icons line icon -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/icon/themify-icons/themify-icons.css}">
+<!-- Font Awesome -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/icon/font-awesome/css/font-awesome.min.css}">
+<!-- ico font -->
+<link rel="stylesheet" type="text/css"
+	th:href="@{/icon/icofont/css/icofont.css}">
+<!-- Style.css -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/jquery.mCustomScrollbar.css}">
 </head>
 
 <body>
-    <!-- Pre-loader start -->
-    <div class="theme-loader">
-        <div class="loader-track">
-            <div class="preloader-wrapper">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-                <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
+	<!-- Pre-loader start -->
+	<div class="theme-loader">
+		<div class="loader-track">
+			<div class="preloader-wrapper">
+				<div class="spinner-layer spinner-blue">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div>
+					<div class="gap-patch">
+						<div class="circle"></div>
+					</div>
+					<div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+				<div class="spinner-layer spinner-red">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div>
+					<div class="gap-patch">
+						<div class="circle"></div>
+					</div>
+					<div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
 
-                <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
+				<div class="spinner-layer spinner-yellow">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div>
+					<div class="gap-patch">
+						<div class="circle"></div>
+					</div>
+					<div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
 
-                <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Pre-loader end -->
-    <div id="pcoded" class="pcoded">
-        <div class="pcoded-overlay-box"></div>
-        <div class="pcoded-container navbar-wrapper">
-            <th:block th:insert="fragments/menu.html :: menu"></th:block>
-            <div class="pcoded-main-container">
-                <div class="pcoded-wrapper">
-                	<th:block th:insert="fragments/menu.html :: menu-left"></th:block>
-                    <div class="pcoded-content" id="content" >
-                        <div class="pcoded-inner-content" th:fragment="content2">
-                            <!-- Main-body start -->
-                            <div class="main-body">
-                                <div class="page-wrapper">
-                                    <!-- Page-body start -->
-                                    <div class="page-body">
-                                        <!-- Hover table card start -->
-                                        <div class="card">
-                                        <div class="row">
-                                        	<div class="col-sm-6">
-											<div class="card pb-3">
-												<div class="card-block">
-													<div class="row">
-														<div class="col-sm-6">
-															<span class="font-weight-bold">User : </span> <span
-																th:text="${userInfo.username}"></span>
+				<div class="spinner-layer spinner-green">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div>
+					<div class="gap-patch">
+						<div class="circle"></div>
+					</div>
+					<div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Pre-loader end -->
+	<div id="pcoded" class="pcoded">
+		<div class="pcoded-overlay-box"></div>
+		<div class="pcoded-container navbar-wrapper">
+			<th:block th:insert="fragments/menu.html :: menu"></th:block>
+			<div class="pcoded-main-container">
+				<div class="pcoded-wrapper">
+					<th:block th:insert="fragments/menu.html :: menu-left"></th:block>
+					<div class="pcoded-content" id="content">
+						<div class="pcoded-inner-content" th:fragment="content2">
+							<!-- Main-body start -->
+							<div class="main-body">
+								<div class="page-wrapper">
+									<!-- Page-body start -->
+									<div class="page-body">
+										<!-- Hover table card start -->
+										<div class="card">
+											<div class="row">
+												<div class="col-sm-6">
+													<div class="card pb-3">
+														<div class="card-block">
+															<div class="row">
+																<div class="col-sm-6">
+																	<span class="font-weight-bold">User : </span> <span
+																		th:text="${userInfo.username}"></span>
+																</div>
+																<div class="col-sm-6">
+																	<span class="font-weight-bold">Room : </span> <span
+																		th:text="${roomInfo.roomName}"></span>
+																</div>
+															</div>
+															<br>
+															<div class="row">
+																<div class="col-sm-12">
+																	<span class="font-weight-bold">Time đợi restart
+																		computer : </span> <span th:text="${timeWatting}"
+																		id="timeWatting"></span>
+																</div>
+															</div>
 														</div>
-														<div class="col-sm-6">
-															<span class="font-weight-bold">Room : </span> <span
-																th:text="${roomInfo.roomName}"></span>
-														</div>
-													</div>
-													<br>
-													<div class="row">
-														<div class="col-sm-12">
-															<span class="font-weight-bold">Time đợi restart computer : </span> <span
-																th:text="${timeWatting}" id="timeWatting"></span>
-														</div>
-													</div>
 													</div>
 												</div>
-											</div>
-											<div class="col-sm-6">
-													<button type="button" id="closeRoomWatting" class="close" aria-label="Close"
+												<div class="col-sm-6">
+													<button type="button" id="closeRoomWatting" class="close"
+														aria-label="Close"
 														style="background: red; width: 50px; height: 50px; font-size: 35px; margin-top: 0px; border-top-right-radius: 7px;">
 														<span aria-hidden="true">&times;</span>
 													</button>
 												</div>
 											</div>
-                                            <div class="card-header">
-                                                <h5>Danh sách đợi restart computer tại room: [[${roomInfo.roomName}]]</h5>
-                                                <div class="card-header-right">
-                                                    <ul class="list-unstyled card-option">
-                                                        <li><i class="fa fa fa-wrench open-card-option"></i></li>
-                                                        <li><i class="fa fa-window-maximize full-card"></i></li>
-                                                        <li><i class="fa fa-minus minimize-card"></i></li>
-                                                        <li><i class="fa fa-refresh reload-card"></i></li>
-                                                        <li><i class="fa fa-trash close-card"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="card-block table-border-style">
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>UserName</th>
-                                                                <th>Email</th>
-                                                                <th>PhoneNumber</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        	<tr th:each="users,iter : ${listUserWatting}">
-															   <th scope="row" th:text="${iter.index + 1}"></th>
-															   <td th:text="${users.username}"></td>
-															   <td th:text="${users.email}"></td>
-															   <td th:text="${users.phone}"></td>
+											<div class="card-header">
+												<h5>Danh sách đợi restart computer tại room:
+													[[${roomInfo.roomName}]]</h5>
+												<div class="card-header-right">
+													<ul class="list-unstyled card-option">
+														<li><i class="fa fa fa-wrench open-card-option"></i></li>
+														<li><i class="fa fa-window-maximize full-card"></i></li>
+														<li><i class="fa fa-minus minimize-card"></i></li>
+														<li><i class="fa fa-refresh reload-card"></i></li>
+														<li><i class="fa fa-trash close-card"></i></li>
+													</ul>
+												</div>
+											</div>
+											<div class="card-block table-border-style">
+												<div class="table-responsive">
+													<table class="table table-hover">
+														<thead>
+															<tr>
+																<th>#</th>
+																<th>UserName</th>
+																<th>Email</th>
+																<th>PhoneNumber</th>
 															</tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Hover table card end -->
-                                    </div>
-                                    <!-- Page-body end -->
-                                </div>
-                            </div>
-                            <!-- Main-body end -->
+														</thead>
+														<tbody>
+															<tr th:each="users,iter : ${listUserWatting}">
+																<th scope="row" th:text="${iter.index + 1}"></th>
+																<td th:text="${users.username}"></td>
+																<td th:text="${users.email}"></td>
+																<td th:text="${users.phone}"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<!-- Hover table card end -->
+									</div>
+									<!-- Page-body end -->
+								</div>
+							</div>
+							<!-- Main-body end -->
 
-                            <div id="styleSelector">
-								<input type="hidden" id = "flagControl" th:value="${flagControl}"/>
-								<input type="hidden" th:value="${isStopMode}" id="stopMode" name="stopMode">
-								 
-                            </div>
-                        </div>
+							<div id="styleSelector">
+								<input type="hidden" id="flagControl" th:value="${flagControl}" />
+								<input type="hidden" th:value="${isStopMode}" id="stopMode"
+									name="stopMode">
+
+							</div>
+						</div>
 					</div>
-                </div>
-            </div>
-        </div>
+				</div>
+			</div>
+		</div>
 		<div class="modal fade" id="exampleModalCenter" tabindex="-1"
 			role="dialog" aria-labelledby="exampleModalCenterTitle"
 			aria-hidden="true">
@@ -209,85 +224,106 @@
 				</div>
 			</div>
 		</div>
-		</div>
-		<!-- Required Jquery -->
-    <script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-ui/jquery-ui.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/popper.js/popper.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
-    <!-- waves js -->
-    <script th:src="@{/pages/waves/js/waves.min.js}"></script>
-    <!-- jquery slimscroll js -->
-    <script type="text/javascript" th:src="@{/js/jquery-slimscroll/jquery.slimscroll.js}"></script>
-    <!-- Custom js -->
-    <script th:src="@{/js/pcoded.min.js}"></script>
-    <script th:src="@{/js/vertical/vertical-layout.min.js}"></script>
-    <script th:src="@{/js/jquery.mCustomScrollbar.concat.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/script.js}"></script>
-    <script>
-    var csrfHeader = $("meta[name='_csrf_header']").attr("content");
-	var csrfToken = $("meta[name='_csrf']").attr("content");
-	var headers = {};
-	headers[csrfHeader] = csrfToken;
-    setInterval(
-			function() {
-				$.ajax({
-					url : "[[@{/listWatingUser/updatedListWattingUser}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-					data : {
-						timeWatting : $("#timeWatting").text(),
-						flagControl : $("#flagControl").val()
-					},
-					dataType : 'html',
-					success : function(result) {
-						$("#content").html(result);
-						if($("#flagControl").val() == "true"){
-							window.location.href = "/hackathon/control";
-						}
+	</div>
+	<!-- Required Jquery -->
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/js/jquery-ui/jquery-ui.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/popper.js/popper.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+	<!-- waves js -->
+	<script th:src="@{/pages/waves/js/waves.min.js}"></script>
+	<!-- jquery slimscroll js -->
+	<script type="text/javascript"
+		th:src="@{/js/jquery-slimscroll/jquery.slimscroll.js}"></script>
+	<!-- Custom js -->
+	<script th:src="@{/js/pcoded.min.js}"></script>
+	<script th:src="@{/js/vertical/vertical-layout.min.js}"></script>
+	<script th:src="@{/js/jquery.mCustomScrollbar.concat.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/script.js}"></script>
+	<script>
+		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+		var csrfToken = $("meta[name='_csrf']").attr("content");
+		var headers = {};
+		headers[csrfHeader] = csrfToken;
+		setInterval(
+				function() {
+					$
+							.ajax({
+								url : "[[@{/listWatingUser/updatedListWattingUser}]]",
+								type : 'POST',
+								headers : headers,
+								contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+								data : {
+									timeWatting : $("#timeWatting").text(),
+									flagControl : $("#flagControl").val()
+								},
+								dataType : 'html',
+								success : function(result) {
+									$("#content").html(result);
+									if ($("#flagControl").val() == "true") {
+										window.location.href = "/hackathon/control";
+									}
+								}
+							});
+					var stopMode = $("#stopMode").val();
+					if (stopMode === "true") {
+						$('#exampleModalCenter').modal({
+							backdrop : 'static',
+							keyboard : false,
+							show : true
+						});
+					} else {
+						$('#exampleModalCenter').modal('hide');
 					}
-				});
-				var stopMode = $("#stopMode").val();
-				if (stopMode === "true") {
-					$('#exampleModalCenter').modal({
-						backdrop : 'static',
-						keyboard : false,
-						show : true
-					});
-				} else {
-					$('#exampleModalCenter').modal('hide');
-				}
-			}, 5000);
-    $(document).ready(function() {
-	   $("#closeRoomWatting").click(function() {
-			$.ajax({
-				url : "[[@{/listWatingUser/closeRoomWatting}]]",
-				type : 'POST',
-				headers : headers,
-				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-				dataType : 'html',
-				success : function(result) {
-					document.getElementById('submitLogout').submit();
-				}
-			});
-	  });
-	  window.addEventListener('beforeunload', function (e) {
-		   // Cancel the event
-		   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-		   $.ajax({
-				url : "[[@{/listWatingUser/closeRoomWatting}]]",
-				type : 'POST',
-				headers : headers,
-				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-				dataType : 'html',
-				success : function(result) {
-					document.getElementById('submitLogout').submit();
-				}
-			});
-	  });
-    });
-    </script>
+				}, 5000);
+		$(document)
+				.ready(
+						function() {
+							$("#closeRoomWatting")
+									.click(
+											function() {
+												$
+														.ajax({
+															url : "[[@{/listWatingUser/closeRoomWatting}]]",
+															type : 'POST',
+															headers : headers,
+															contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+															dataType : 'html',
+															success : function(
+																	result) {
+																document
+																		.getElementById(
+																				'submitLogout')
+																		.submit();
+															}
+														});
+											});
+							window
+									.addEventListener(
+											'beforeunload',
+											function(e) {
+												// Cancel the event
+												e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+												$
+														.ajax({
+															url : "[[@{/listWatingUser/closeRoomWatting}]]",
+															type : 'POST',
+															headers : headers,
+															contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+															dataType : 'html',
+															success : function(
+																	result) {
+																document
+																		.getElementById(
+																				'submitLogout')
+																		.submit();
+															}
+														});
+											});
+						});
+	</script>
 </body>
 
 </html>

@@ -9,18 +9,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hackathon.restart.computer.controller.rest.RobotApiController;
+import hackathon.restart.computer.dto.RstListWattingUserDto;
 import hackathon.restart.computer.entity.RobotInfo;
 import hackathon.restart.computer.entity.RoomInfo;
 import hackathon.restart.computer.entity.Users;
 import hackathon.restart.computer.service.ControlService;
 import hackathon.restart.computer.service.CustomUser;
 import hackathon.restart.computer.service.RoomInfoService;
+import hackathon.restart.computer.service.UsersService;
 
 @Controller
 @RequestMapping("admin/control")
@@ -30,6 +33,8 @@ public class AdminControlController {
 	private RobotApiController robotApiController;
 	@Autowired
 	private RoomInfoService roomInfoService;
+	@Autowired
+	UsersService usersService;
 	@Autowired
 	private ControlService controlService;
 	private static final String FLG_STOP = "1";
@@ -44,15 +49,22 @@ public class AdminControlController {
 		int roomId = userInfo.getRoom_id();
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
+		if(ObjectUtils.isEmpty(robotInfo)) {
+			
+		}
 		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());
 
 		// Get select
 		List<RoomInfo> listRoomInfo = roomInfoService.findAllRoom();
 		
+		// List user waiting
+		List<RstListWattingUserDto> listUserWatting = usersService.listUserWattingByRoom(roomId);
+		
 		model.addAttribute("listRoomInfo", listRoomInfo);
 		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
+		model.addAttribute("listUserWatting", listUserWatting);
 		//4. Check is stop mode
 		return "tabs";
 	}
@@ -92,6 +104,11 @@ public class AdminControlController {
 		RobotInfo robotInfo = robotApiController.getRobotInfo(idRoom, roomInfo.getToken());
 		
 		robotApiController.updateTokenToMemory(idRoom, roomInfo.getToken());
+		
+		// List user waiting
+		List<RstListWattingUserDto> listUserWatting = usersService.listUserWattingByRoom(idRoom);
+		
+		model.addAttribute("listUserWatting", listUserWatting);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
 		return "tabs :: monitor";

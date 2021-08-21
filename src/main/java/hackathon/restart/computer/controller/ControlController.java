@@ -51,7 +51,7 @@ public class ControlController {
 		RoomInfo roomInfo = roomInfoService.findById(roomId).get();
 		
 		// Check access control
-		if(!userInfo.getUsername().equals(roomInfo.getUpdate_by_user())) {
+		if(!userInfo.getUsername().equals(roomInfo.getUser_control())) {
 			return "redirect:/listWatingUser";
 		}
 		RobotInfo robotInfo = robotApiController.getRobotInfo(roomId, roomInfo.getToken());
@@ -59,6 +59,7 @@ public class ControlController {
 		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
+		model.addAttribute("timeControl", roomInfo.getUpdate_date().plusMinutes(10));
 		
 		//4. Check is stop mode
 		model.addAttribute("isStopMode", controlService.isStopMode(roomId));
