@@ -30,4 +30,7 @@ public class Users {
 
 	@Column(name = "phone")
 	private String phone;
+	
+	@Column(name = "avatar")
+	private String avatar;
 }

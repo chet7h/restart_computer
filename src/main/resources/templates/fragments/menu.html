@@ -140,7 +140,8 @@
 						</ul></li>
 					<li class="user-profile header-notification"><a href="#!"
 						class="waves-effect waves-light"> <img
-							th:src="@{/images/avatar-4.jpg}" class="img-radius"
+						th:src="'/hackathon/images/avt/' + ${userInfo.avatar}"
+							 class="img-radius"
 							alt="User-Profile-Image"> <span>[[${#request.userPrincipal.principal.username}]]</span> <i
 							class="ti-angle-down"></i>
 					</a>
@@ -177,7 +178,7 @@
 		<div class="pcoded-inner-navbar main-menu">
 			<div class="">
 				<div class="main-menu-header">
-					<img class="img-80 img-radius" th:src="@{/images/avatar-4.jpg}"
+					<img class="img-80 img-radius" th:src="'/hackathon/images/avt/' + ${userInfo.avatar}"
 						alt="User-Profile-Image">
 					<div class="user-details">
 						<span id="more-details">[[${#request.userPrincipal.principal.username}]]<i class="fa fa-caret-down"></i></span>
