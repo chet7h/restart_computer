@@ -423,7 +423,7 @@
 												});
 
 										var stopMode = $("#stopMode").val();
-										if (stopMode === "treue") {
+										if (stopMode === "true") {
 											$('#exampleModalCenter').modal({
 												backdrop : 'static',
 												keyboard : false,
@@ -435,7 +435,7 @@
 										}
 
 										var isOverTime = $("#expireTime").val();
-										if (isOverTime === "truee") {
+										if (isOverTime === "true") {
 											$
 													.ajax({
 														url : "[[@{/control/endControl}]]",
