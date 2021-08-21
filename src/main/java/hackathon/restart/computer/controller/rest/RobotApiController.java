@@ -81,7 +81,8 @@ public class RobotApiController {
 			@RequestParam int wifiSignal, @RequestParam int batteryPercentage) {
 		if (deviceStatus.get(deviceId).getSecrect().equals(token)) {
 			RobotInfo robotInfo = deviceStatus.get(deviceId);
-			robotInfo.setWifiSignal(wifiSignal);
+			int PerWifi = ((5)* wifiSignal )/ 3 + 150;
+			robotInfo.setWifiSignal(PerWifi);
 			robotInfo.setBatteryPercentage(batteryPercentage);
 			String output = deviceStatus.get(deviceId).getNavigateControl() + "-" + deviceStatus.get(deviceId).getArmControl();
 			robotInfo.setArmControl(0);
