@@ -76,9 +76,6 @@ public class ControlController {
 		model.addAttribute("robotInfo", robotInfo);
 		model.addAttribute("isStopMode", controlService.isStopMode(Integer.parseInt(deviceId)));
 		
-		RoomInfo roomInfo = roomInfoService.findById(Integer.parseInt(deviceId)).get();
-		model.addAttribute("isOverTime", controlService.isOverTime(1, LocalDateTime.now(), roomInfo.getUpdate_date()));
-		
 		// xu ly check pin robot va gui sms
 		try {
 			roomInfoService.checkPinRobotAndSenMsg(robotInfo);

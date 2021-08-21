@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Control Page</title>
+<title>Material Able bootstrap admin template by Codedthemes</title>
 <!-- Meta -->
 <meta charset="utf-8">
 <meta name="viewport"
@@ -73,14 +73,18 @@
 												<div class="card pb-3">
 													<div class="card-block">
 														<div class="row">
-															<div class="col-sm-6">
+															<div class="col-sm-4">
 																<span class="font-weight-bold">User1 : </span> <span
 																	th:text="${userInfo.username}"></span>
 															</div>
-															<div class="col-sm-6">
+															<div class="col-sm-3">
 																<span class="font-weight-bold">Room : </span> <span
 																	th:text="${roomInfo.roomName}"></span>
 															</div>
+															<div class="col-sm-5">
+																	<span class="font-weight-bold">Time Control : </span> <span class="pl-3"
+																		id="time"></span>
+																</div>
 														</div>
 													</div>
 												</div>
@@ -104,9 +108,7 @@
 																	</div>
 																</div> -->
 																<input type="hidden" th:value="${isStopMode}"
-																	id="stopMode" name="stopMode"> <input
-																	type="hidden" th:value="${isOverTime}" id="expireTime"
-																	name="expireTime">
+																	id="stopMode" name="stopMode"> 
 															</div>
 														</div>
 													</div>
@@ -232,6 +234,8 @@
 			</div>
 		</div>
 	</div>
+	<input type="hidden" th:value="${roomInfo.update_date}"
+		id="timeControl" name="timeControl">
 	<input type="hidden" name="device_id" th:value="${robotInfo.deviceId}"
 		id="device_id">
 	<input type="hidden" name="token" th:value="${roomInfo.token}"
@@ -259,7 +263,39 @@
 		var csrfToken = $("meta[name='_csrf']").attr("content");
 		var headers = {};
 		headers[csrfHeader] = csrfToken;
-
+		
+		var countDownDate = $("#timeControl").val();
+		setInterval(
+				function() {
+					var now = new Date().getTime();
+					var distance =  Date.parse(countDownDate) + 10000 * 60 - now;
+					var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+					var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+					document.getElementById("time").innerHTML = minutes + " : " + seconds;
+					
+					if (distance < 0) {
+						$
+								.ajax({
+									url : "[[@{/control/endControl}]]",
+									type : 'POST',
+									headers : headers,
+									contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+									data : {
+										deviceId : $(
+												"#device_id")
+												.val(),
+										token : $("#token")
+												.val()
+									},
+									dataType : 'json',
+									success : function(
+											result) {
+									}
+								});
+						window.location.href = "/hackathon/login";
+					}
+						
+				}, 1000);
 		$(document).keypress(function(event) {
 
 			var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -432,29 +468,6 @@
 										} else {
 											$('#exampleModalCenter').modal(
 													'hide');
-										}
-
-										var isOverTime = $("#expireTime").val();
-										if (isOverTime === "true") {
-											$
-													.ajax({
-														url : "[[@{/control/endControl}]]",
-														type : 'POST',
-														headers : headers,
-														contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-														data : {
-															deviceId : $(
-																	"#device_id")
-																	.val(),
-															token : $("#token")
-																	.val()
-														},
-														dataType : 'json',
-														success : function(
-																result) {
-														}
-													});
-											window.location.href = "/hackathon/login";
 										}
 									}, 3000);
 						});
