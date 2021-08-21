@@ -20,7 +20,7 @@ public class IndexController {
 		return "auth-normal-sign-in";
 	}
 	@RequestMapping(value = { "/403" })
-	public String error(@RequestParam(required = false) String message, final Model model) {
-		return "";
+	public String error(final Model model) {
+		return "403";
 	}
 }
