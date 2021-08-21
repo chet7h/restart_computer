@@ -54,17 +54,11 @@ public class ListWattingUserController {
 		if(listUserWatting.isEmpty() && StringUtils.isEmpty(roomInfo.getToken())) {
 			//không có ai điều khiển
 			//updated token of roominfo
-			roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(), userInfo.getUsername(), LocalDateTime.now(), roomId);
+			roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(),userInfo.getUsername(), userInfo.getUsername(), LocalDateTime.now(), roomId);
 			return "redirect:/control";
 		}else {
 			// check userLogin in list watting.
-			List<Integer> listIdUserWatting = new ArrayList<>();
-			for(RstListWattingUserDto listWattingUserDto: listUserWatting) {
-				listIdUserWatting.add(listWattingUserDto.getId());
-			}
-			if(listIdUserWatting.contains(userInfo.getId())) {
-				// có trong danh sách đợi không add nữa
-			} else {
+			if(!checkUserExitListWating(listUserWatting,userInfo)){
 				ListWattingUser userWatting = new ListWattingUser();
 				userWatting.setFlagcontrol(false);
 				userWatting.setUser_id(userInfo.getId());
@@ -101,7 +95,7 @@ public class ListWattingUserController {
 				//deleted user này ra khỏi danh sách đợi
 				listWattingUserService.deleteWattingUser(listUserWatting.get(0).getId_watting());
 				//updated token of roominfo
-				roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(), userInfo.getUsername(), LocalDateTime.now(), roomId);
+				roomInfoService.updateTokenRoom2(UUID.randomUUID().toString(),userInfo.getUsername(), userInfo.getUsername(), LocalDateTime.now(), roomId);
 				flagControl = listUserWatting.get(0).isFlagcontrol();
 			}
 		} else {
@@ -115,6 +109,24 @@ public class ListWattingUserController {
 		// Check is stop mode
 		model.addAttribute("isStopMode", isStopMode(roomId));
 		return "listWatingUser :: content2";
+	}
+	@PostMapping("/closeRoomWatting")
+	public String closeRoomWatting(Model model,Principal principal) {
+		//1. Remove userLogin ra khoi danh sach doi
+		CustomUser loginedUser = (CustomUser) ((Authentication) principal).getPrincipal();
+		Users userInfo = loginedUser.getUsers();
+		listWattingUserService.deleteWattingUserLogin(userInfo.getId());
+		return "redirect:/login";
+	}
+	private boolean checkUserExitListWating(List<RstListWattingUserDto> listUserWatting, Users userInfo) {
+		List<Integer> listIdUserWatting = new ArrayList<>();
+		for(RstListWattingUserDto listWattingUserDto: listUserWatting) {
+			listIdUserWatting.add(listWattingUserDto.getId());
+		}
+		if(listIdUserWatting.contains(userInfo.getId())) {
+			return true;
+		}
+		return false;
 	}
 	private boolean isStopMode(int deviceId) {
 		RoomInfo roomInfo = roomInfoService.findById(deviceId).get();
@@ -146,7 +158,6 @@ public class ListWattingUserController {
 			return (hh*60*60 + mm*60 + ss) -3;
 		}
 		return 0;
-		
 	}
 
 }

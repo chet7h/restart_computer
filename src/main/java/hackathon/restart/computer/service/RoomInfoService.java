@@ -94,8 +94,8 @@ public class RoomInfoService {
 			roomInfoReponsitory.save(roomInfo);
 		}
 	}
-	public int updateTokenRoom2(String token, String user, LocalDateTime updateDate, int id) {
-		return roomInfoReponsitory.updateTokenRoom2(token, user, updateDate,id);
+	public int updateTokenRoom2(String token, String user_control, String user, LocalDateTime updateDate, int id) {
+		return roomInfoReponsitory.updateTokenRoom2(token,user_control, user, updateDate,id);
 	}
 
 	public int updateFlgMode(String flg, int roomId, String userUpdate, LocalDateTime updateTime) {

@@ -30,8 +30,8 @@ public interface RoomInfoReponsitory extends JpaRepository<RoomInfo, Integer>  {
 	
 	@Transactional
 	@Modifying()
-	@Query("update RoomInfo u set u.token = ?1, u.update_by_user = ?2, u.update_date =?3 where u.id = ?4")
-	int updateTokenRoom2(String token, String user, LocalDateTime updateDate, int id);
+	@Query("update RoomInfo u set u.token = ?1,u.user_control = ?2, u.update_by_user = ?3, u.update_date =?4 where u.id = ?5")
+	int updateTokenRoom2(String token, String user_control, String user, LocalDateTime updateDate, int id);
 	
 	@Transactional
 	@Modifying()

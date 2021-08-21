@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import hackathon.restart.computer.service.CustomUserDetailsService;
  
@@ -25,6 +26,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
      
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -61,6 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Ngoại lệ AccessDeniedException sẽ ném ra.
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
         
+         // Cấu hình concurrent session
+         http.sessionManagement().sessionFixation().newSession()
+        .maximumSessions(1).expiredUrl("/login?message=max_session").maxSessionsPreventsLogin(true);
+        
     	http.authorizeRequests().and().formLogin()//
         // Submit URL của trang login
         .loginProcessingUrl("/checkLogin") // Submit URL
@@ -70,6 +80,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .usernameParameter("email")//
         .passwordParameter("password")
         // Cấu hình cho Logout Page.
-        .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login?message=logout");
+        .and().logout().logoutUrl("/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessUrl("/login?message=logout");
     	}
 }

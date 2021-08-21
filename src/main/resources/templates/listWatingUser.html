@@ -112,6 +112,7 @@
                                     <div class="page-body">
                                         <!-- Hover table card start -->
                                         <div class="card">
+                                        <div class="row">
                                         	<div class="col-sm-6">
 											<div class="card pb-3">
 												<div class="card-block">
@@ -133,6 +134,13 @@
 														</div>
 													</div>
 													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+													<button type="button" id="closeRoomWatting" class="close" aria-label="Close"
+														style="background: red; width: 50px; height: 50px; font-size: 35px; margin-top: 0px; border-top-right-radius: 7px;">
+														<span aria-hidden="true">&times;</span>
+													</button>
 												</div>
 											</div>
                                             <div class="card-header">
@@ -250,7 +258,35 @@
 				} else {
 					$('#exampleModalCenter').modal('hide');
 				}
-			}, 3000);
+			}, 5000);
+    $(document).ready(function() {
+	   $("#closeRoomWatting").click(function() {
+			$.ajax({
+				url : "[[@{/listWatingUser/closeRoomWatting}]]",
+				type : 'POST',
+				headers : headers,
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				dataType : 'html',
+				success : function(result) {
+					document.getElementById('submitLogout').submit();
+				}
+			});
+	  });
+	  window.addEventListener('beforeunload', function (e) {
+		   // Cancel the event
+		   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+		   $.ajax({
+				url : "[[@{/listWatingUser/closeRoomWatting}]]",
+				type : 'POST',
+				headers : headers,
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				dataType : 'html',
+				success : function(result) {
+					document.getElementById('submitLogout').submit();
+				}
+			});
+	  });
+    });
     </script>
 </body>
 
