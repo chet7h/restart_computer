@@ -291,7 +291,7 @@
 											result) {
 									}
 								});
-						window.location.href = "/hackathon/login";
+						window.location.href = "/hackathon/control";
 					}
 						
 				}, 1000);
@@ -469,7 +469,28 @@
 													'hide');
 										}
 									}, 3000);
+							 window.addEventListener('beforeunload', function (e) {
+						  		   // Cancel the event
+						  		   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+						  		   $.ajax({
+						  				url : "[[@{/control/endControl}]]",
+						  				type : 'POST',
+						  				headers : headers,
+						  				data : {
+											deviceId : $(
+													"#device_id")
+													.val(),
+										},
+						  				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+						  				dataType : 'html',
+						  				success : function(result) {
+						  					document.getElementById('submitLogout').submit();
+						  				}
+						  			});
+						  	  });
+
 						});
+
 	</script>
 	<script type="text/javascript" th:src="@{/js/script.js}"></script>
 </body>
