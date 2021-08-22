@@ -3,6 +3,7 @@ package hackathon.restart.computer.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -51,7 +52,7 @@ public class AdminControlController {
 		if(ObjectUtils.isEmpty(robotInfo)) {
 			
 		}
-		robotApiController.updateTokenToMemory(roomId, roomInfo.getToken());
+		roomInfo.setToken(robotApiController.updateTokenAdminToMemory(roomId, UUID.randomUUID().toString()));
 
 		// Get select
 		List<RoomInfo> listRoomInfo = roomInfoService.findAllRoom();

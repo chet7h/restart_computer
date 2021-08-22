@@ -47,9 +47,11 @@ void setup() {
 
   Serial.begin(115200);
   // Serial.setDebugOutput(true);
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  digitalWrite(relay1, HIGH);
+  digitalWrite(relay2, LOW);
 
-  Serial.println();
-  Serial.println();
   Serial.println();
 
   for (uint8_t t = 4; t > 0; t--) {
@@ -60,10 +62,7 @@ void setup() {
 
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP("Baongoc", "baongoc@2018");
-  pinMode(relay1, OUTPUT);
-  pinMode(relay2, OUTPUT);
-  digitalWrite(relay1, HIGH);
-  digitalWrite(relay2, LOW);
+
 
   pinMode(analogInput, INPUT);
 }

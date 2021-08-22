@@ -24,6 +24,7 @@ public class RobotApiController {
 	private Map<Integer, RobotInfo> deviceStatus = new HashMap<>();
 	
 	private Map<Integer, String> tokenInfo = new HashMap<>();
+	private Map<Integer, String> tokenAdmin = new HashMap<>();
 
 	@PostConstruct
 	private void initDeviceStatus() {
@@ -57,7 +58,8 @@ public class RobotApiController {
 	 */
 	@PostMapping("/setNavigate")
 	public void setNavigate(@RequestBody NavigateForm navigateForm) {
-		if (tokenInfo.get(navigateForm.getDeviceId()).equals(navigateForm.getToken())) {
+//		if (tokenInfo.get(navigateForm.getDeviceId()).equals(navigateForm.getToken())) {
+		if (isToken(navigateForm.getDeviceId(), navigateForm.getToken())) {
 			int navigateControl = navigateForm.getNavigateControl();
 			Integer trueValue[] = { 0, 1, 2, 3, 4 };
 			if (!Arrays.asList(trueValue).contains(navigateControl)) {
@@ -99,7 +101,23 @@ public class RobotApiController {
 	}
 	
 	public String updateTokenToMemory(int roomId, String token) {
-		return tokenInfo.put(roomId, token);
+		tokenInfo.put(roomId, token);
+		return token;
+	}
+
+	public String updateTokenAdminToMemory(int roomId, String token) {
+		tokenAdmin.put(roomId, token);
+		return token;
+
+	}
+	
+	private boolean isToken(int roomId, String token) {
+		if (token.equals(tokenInfo.get(roomId)) || token.equals(tokenAdmin.get(roomId))) {
+			return true;
+		}
+		
+		return false;
+		
 	}
 
 }
