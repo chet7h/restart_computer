@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,6 +64,7 @@ public class AdminControlController {
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
 		model.addAttribute("listUserWatting", listUserWatting);
+		model.addAttribute("isStopMode", roomInfo.getStopModeFlg());
 		//4. Check is stop mode
 		return "tabs";
 	}
@@ -84,17 +84,19 @@ public class AdminControlController {
 	}
 	
 	@PostMapping("/stopMode")
-	public ResponseEntity<String> stopMode(@RequestParam String deviceId) {
+	public String stopMode(@RequestParam String deviceId, Model model) {
 
 		roomInfoService.updateFlgMode(FLG_STOP, Integer.parseInt(deviceId), "Page Admin", LocalDateTime.now());
-		return ResponseEntity.ok("Update successfully");
+		model.addAttribute("isStopMode", FLG_STOP);
+		return "tabs::settingFlgMode";
 	}
 	
 	@PostMapping("/turnOnMode")
-	public ResponseEntity<String> turnOnMode(@RequestParam String deviceId) {
+	public String turnOnMode(@RequestParam String deviceId, Model model) {
 
 		roomInfoService.updateFlgMode(FLG_UNSTOP,Integer.parseInt(deviceId), "Page Admin", LocalDateTime.now());
-		return ResponseEntity.ok("Update successfully");
+		model.addAttribute("isStopMode", FLG_UNSTOP);
+		return "tabs::settingFlgMode";
 	}
 	
 	@PostMapping("/selectRoom")
@@ -111,6 +113,7 @@ public class AdminControlController {
 		model.addAttribute("listUserWatting", listUserWatting);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
+		model.addAttribute("isStopMode", roomInfo.getStopModeFlg());
 		return "tabs :: monitor";
 	}
 }

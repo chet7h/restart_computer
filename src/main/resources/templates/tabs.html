@@ -233,27 +233,27 @@
 																								</tr>
 																								<tr>
 																									<td></td>
-																									<td><button data-navigate="4"
+																									<td><button th:onclick="setNavigate(this);" data-navigate="4"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-arrow-up"></i>
 																										</button></td>
 																									<td></td>
 																									<td></td>
-																									<td><button data-arm="2"
+																									<td><button th:onclick="setNavigate(this);" data-arm="2"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-arrow-up"></i>
 																										</button></td>
 																								</tr>
 																								<tr>
-																									<td><button data-navigate="1"
+																									<td><button th:onclick="setNavigate(this);" data-navigate="1"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-arrow-left"></i>
 																										</button></td>
-																									<td><button data-navigate="0"
+																									<td><button th:onclick="setNavigate(this);" data-navigate="0"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-stop"></i>
 																										</button></td>
-																									<td><button data-navigate="2"
+																									<td><button th:onclick="setNavigate(this);" data-navigate="2"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-arrow-right"></i>
 																										</button></td>
@@ -262,13 +262,13 @@
 																								</tr>
 																								<tr>
 																									<td></td>
-																									<td><button data-navigate="3"
+																									<td><button th:onclick="setNavigate(this);" data-navigate="3"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-arrow-down"></i>
 																										</button></td>
 																									<td></td>
 																									<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-																									<td><button data-arm="2"
+																									<td><button th:onclick="setNavigate(this);" data-arm="2"
 																											class="btn btn-primary waves-effect waves-light">
 																											<i class="icofont icofont-arrow-down"></i>
 																										</button></td>
@@ -303,29 +303,31 @@
 																				Cum sociis natoque penatibus et magnis dis.....</p>
 																		</div>
 																		<div class="tab-pane" id="settings1" role="tabpanel">
-																			<div class="row h-100">
-																				<div class="col-sm-6">
-																					<div class="btn btn-success" id="turnOffMode">Turn
-																						off</div>
-																					<div class="btn btn-success d-none" id="turnOnMode">Turn
-																						on</div>
-																				</div>
-																				<div class="col-sm-6">
-																					<div
-																						class="alert alert-success alert-dismissible d-none"
-																						id="notify-stop" role="alert">
-																						<a href="#" class="close" data-dismiss="alert"
-																							aria-label="close">&times;</a> <strong
-																							class="font-weight-bold">Success!</strong> Stop
-																						successfully!
+																			<div th:fragment="settingFlgMode">
+																				<div class="row h-100">
+																					<div class="col-sm-6">
+																						<div class="btn btn-success" th:classappend="${isStopMode} == '0'? '' : d-none" th:onclick="turnOffMode();" id="turnOff">Turn
+																							off</div>
+																						<div class="btn btn-success" th:classappend="${isStopMode} == '1'? '' : d-none" th:onclick="turnOnMode();" id="turnOn">Turn
+																							on</div>
 																					</div>
-																					<div
-																						class="alert alert-success alert-dismissible d-none"
-																						id="notify-turnon" role="alert">
-																						<a href="#" class="close" data-dismiss="alert"
-																							aria-label="close">&times;</a> <strong
-																							class="font-weight-bold">Success!</strong> Turn
-																						on successfully!
+																					<div class="col-sm-6">
+																						<div
+																							class="alert alert-success alert-dismissible d-none"
+																							id="notify-stop" role="alert">
+																							<a href="#" class="close" data-dismiss="alert"
+																								aria-label="close">&times;</a> <strong
+																								class="font-weight-bold">Success!</strong> Stop
+																							successfully!
+																						</div>
+																						<div
+																							class="alert alert-success alert-dismissible d-none"
+																							id="notify-turnon" role="alert">
+																							<a href="#" class="close" data-dismiss="alert"
+																								aria-label="close">&times;</a> <strong
+																								class="font-weight-bold">Success!</strong> Turn
+																							on successfully!
+																						</div>
 																					</div>
 																				</div>
 																			</div>
@@ -490,85 +492,6 @@
 															.html();
 												}
 											});
-
-							// CONTROL BUTTON
-							$("button").click(function() {
-								let formData = {
-									deviceId : $("#device_id").val(),
-									navigateControl : $(this).data('navigate'),
-									armControl : $(this).data('arm'),
-									token : $("#token").val()
-								}
-								$.ajax({
-									url : "[[@{/robot/setNavigate}]]",
-									type : 'POST',
-									headers : headers,
-									contentType : "application/json",
-									data : JSON.stringify(formData),
-									dataType : 'json',
-									success : function(result) {
-									}
-								});
-							});
-
-							$('#turnOffMode')
-									.click(
-											function() {
-												$
-														.ajax({
-															url : "[[@{/admin/control/stopMode}]]",
-															type : 'POST',
-															headers : headers,
-															contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-															data : {
-																deviceId : $(
-																		"#device_id")
-																		.val(),
-															},
-															dataType : 'json',
-															success : function(
-																	result) {
-															}
-														});
-												$('#turnOffMode').addClass(
-														"d-none");
-												$('#turnOnMode').removeClass(
-														"d-none");
-												$('#notify-stop').removeClass(
-														"d-none");
-												$('#notify-turnon').addClass(
-														"d-none");
-											});
-
-							$('#turnOnMode')
-									.click(
-											function() {
-												$
-														.ajax({
-															url : "[[@{/admin/control/turnOnMode}]]",
-															type : 'POST',
-															headers : headers,
-															contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-															data : {
-																deviceId : $(
-																		"#device_id")
-																		.val(),
-															},
-															dataType : 'json',
-															success : function(
-																	result) {
-															}
-														});
-												$('#turnOffMode').removeClass(
-														"d-none");
-												$('#turnOnMode').addClass(
-														"d-none");
-												$('#notify-stop').addClass(
-														"d-none");
-												$('#notify-turnon')
-														.removeClass("d-none");
-											});
-
 							$('#selectRoom')
 									.change(
 											function() {
@@ -615,6 +538,64 @@
 												});
 									}, 3000);
 						});
+	// CONTROL BUTTON
+		function setNavigate(element) {
+		let formData = {
+			deviceId : $("#device_id").val(),
+			navigateControl : $(element).data('navigate'),
+			armControl : $(element).data('arm'),
+			token : $("#token").val()
+		}
+		$.ajax({
+			url : "[[@{/robot/setNavigate}]]",
+			type : 'POST',
+			headers : headers,
+			contentType : "application/json",
+			data : JSON.stringify(formData),
+			dataType : 'json',
+			success : function(result) {
+			}
+		});
+	}
+	
+	function turnOffMode() {
+		$
+		.ajax({
+			url : "[[@{/admin/control/stopMode}]]",
+			type : 'POST',
+			headers : headers,
+			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data : {
+				deviceId : $("#device_id").val(),
+			},
+			dataType : 'json',
+			success : function(result) {
+			}
+		});
+		$('#turnOff').addClass("d-none");
+		$('#turnOn').removeClass("d-none");
+		$('#notify-stop').removeClass("d-none");
+		$('#notify-turnon').addClass("d-none");
+	}
+
+	function turnOnMode() {
+		$.ajax({
+			url : "[[@{/admin/control/turnOnMode}]]",
+			type : 'POST',
+			headers : headers,
+			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+			data : {
+				deviceId : $("#device_id").val(),
+			},
+			dataType : 'json',
+			success : function(result) {
+			}
+		});
+		$('#turnOff').removeClass("d-none");
+		$('#turnOn').addClass("d-none");
+		$('#notify-stop').addClass("d-none");
+		$('#notify-turnon').removeClass("d-none");
+	}
 	</script>
 	<!-- Custom js -->
 	<script type="text/javascript" th:src="@{/js/script.js}"></script>
