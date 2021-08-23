@@ -202,7 +202,7 @@
 																				</div>
 																			</div>
 																			<div class="row h-100">
-																				<div class="col-sm-6">
+																				<div class="col-sm-6" >
 																					<div class="card">
 																						<div class="card-header">
 																							<div class="card-header-left">
@@ -210,6 +210,56 @@
 																							</div>
 																						</div>
 																						<div class="card-block">
+																							
+																							<table>
+																								<tr>
+																									<th colspan="3">hướng di chuyển</th>
+																		
+																									<th colspan="2">cánh tay</th>
+																								</tr>
+																								<tr>
+																									<td></td>
+																									<td><button th:onclick="setNavigate(this);" data-navigate="4"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-arrow-up"></i>
+																										</button></td>
+																									<td></td>
+																									<td></td>
+																									<td><button data-arm="1" th:onclick="setNavigate(this);"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-arrow-up"></i>
+																										</button></td>
+																								</tr>
+																								<tr>
+																									<td><button data-navigate="1" th:onclick="setNavigate(this);"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-arrow-left"></i>
+																										</button></td>
+																									<td><button data-navigate="0" th:onclick="setNavigate(this);"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-stop"></i>
+																										</button></td>
+																									<td><button data-navigate="2" th:onclick="setNavigate(this);"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-arrow-right"></i>
+																										</button></td>
+																									<td></td>
+																									<td></td>
+																								</tr>
+																								<tr>
+																									<td></td>
+																									<td><button data-navigate="3" th:onclick="setNavigate(this);"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-arrow-down"></i>
+																										</button></td>
+																									<td></td>
+																									<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+																									<td><button data-arm="2" th:onclick="setNavigate(this);"
+																											class="btn btn-primary waves-effect waves-light">
+																											<i class="icofont icofont-arrow-down"></i>
+																										</button></td>
+																								</tr>
+																							</table>
 																							<!-- button Default -->
 																							<p>
 																								Có thể ấn phím
@@ -225,55 +275,6 @@
 																								Hoạt động không đúng khi dùng
 																								<code>Unikey ...</code>
 																							</p>
-																							<table>
-																								<tr>
-																									<th colspan="3">hướng di chuyển</th>
-
-																									<th colspan="2">cánh tay</th>
-																								</tr>
-																								<tr>
-																									<td></td>
-																									<td><button th:onclick="setNavigate(this);" data-navigate="4"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-arrow-up"></i>
-																										</button></td>
-																									<td></td>
-																									<td></td>
-																									<td><button th:onclick="setNavigate(this);" data-arm="2"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-arrow-up"></i>
-																										</button></td>
-																								</tr>
-																								<tr>
-																									<td><button th:onclick="setNavigate(this);" data-navigate="1"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-arrow-left"></i>
-																										</button></td>
-																									<td><button th:onclick="setNavigate(this);" data-navigate="0"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-stop"></i>
-																										</button></td>
-																									<td><button th:onclick="setNavigate(this);" data-navigate="2"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-arrow-right"></i>
-																										</button></td>
-																									<td></td>
-																									<td></td>
-																								</tr>
-																								<tr>
-																									<td></td>
-																									<td><button th:onclick="setNavigate(this);" data-navigate="3"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-arrow-down"></i>
-																										</button></td>
-																									<td></td>
-																									<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-																									<td><button th:onclick="setNavigate(this);" data-arm="2"
-																											class="btn btn-primary waves-effect waves-light">
-																											<i class="icofont icofont-arrow-down"></i>
-																										</button></td>
-																								</tr>
-																							</table>
 																						</div>
 																					</div>
 																				</div>
@@ -285,8 +286,9 @@
 																						</div>
 																						<div class="card-block h-600">
 																							<!-- button Default -->
-																							<img class="rounded mx-auto d-block" id="stream"
-																								th:src="${roomInfo.linkCamera}">
+																								<!-- <img class="rounded mx-auto d-block" id="stream" -->
+																								<!-- th:src="${roomInfo.linkCamera}"> -->
+																							<iframe th:src="${roomInfo.linkCamera}" style="width: 338px; height: 338px; border:none"></iframe>
 																						</div>
 																					</div>
 																				</div>
@@ -387,96 +389,84 @@
 		$(document).keypress(function(event) {
 
 			var keycode = (event.keyCode ? event.keyCode : event.which);
-			if (keycode == '119') {
-				let formData = {
+			let formData;
+			switch (keycode) {
+			case 119:
+				formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '4',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '97') {
-				let formData = {
+				break;
+			case 97:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '1',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '100') {
-				let formData = {
+				break;
+			case 100:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '2',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '120') {
-				let formData = {
+				break;
+			case 120:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '3',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
-			}
-			if (keycode == '115') {
-				let formData = {
+				break;
+			case 115:
+				 formData = {
 					deviceId : $("#device_id").val(),
 					navigateControl : '0',
 					armControl : '0',
 					token : $("#token").val()
 				}
-				$.ajax({
-					url : "[[@{/robot/setNavigate}]]",
-					type : 'POST',
-					headers : headers,
-					contentType : "application/json",
-					data : JSON.stringify(formData),
-					dataType : 'json',
-					success : function(result) {
-					}
-				});
+				break;
+			case 112:
+				 formData = {
+					deviceId : $("#device_id").val(),
+					navigateControl : '0',
+					armControl : '1',
+					token : $("#token").val()
+				}
+				break;
+
+			case 108:
+				 formData = {
+					deviceId : $("#device_id").val(),
+					navigateControl : '0',
+					armControl : '2',
+					token : $("#token").val()
+				}
+				break;
+			default:
+				 formData = {
+					deviceId : $("#device_id").val(),
+					navigateControl : '0',
+					armControl : '0',
+					token : $("#token").val()
+				}
+				break;
 			}
+			$.ajax({
+				url : "[[@{/robot/setNavigate}]]",
+				type : 'POST',
+				headers : headers,
+				contentType : "application/json",
+				data : JSON.stringify(formData),
+				dataType : 'json',
+				success : function(result) {
+				}
+			});
 		});
 		$(document)
 				.ready(
