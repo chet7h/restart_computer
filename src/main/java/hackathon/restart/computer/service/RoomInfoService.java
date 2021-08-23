@@ -83,7 +83,7 @@ public class RoomInfoService {
 				}
 			}
 
-			roomInfo.setStopModeFlg("0");
+			//roomInfo.setStopModeFlg("0"); sai logic
 			roomInfo.setSendSmsFlg("0");
 			roomInfo.setUpdate_by_user("batchRestartComputer");
 			roomInfo.setUpdate_date(LocalDateTime.now());
