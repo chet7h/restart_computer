@@ -134,27 +134,27 @@
 															<tr>
 																<td></td>
 																<td><button data-navigate="4"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-up"></i>
 																	</button></td>
 																<td></td>
 																<td></td>
 																<td><button data-arm="1"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-up"></i>
 																	</button></td>
 															</tr>
 															<tr>
 																<td><button data-navigate="1"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-left"></i>
 																	</button></td>
 																<td><button data-navigate="0"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-stop"></i>
 																	</button></td>
 																<td><button data-navigate="2"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-right"></i>
 																	</button></td>
 																<td></td>
@@ -163,13 +163,13 @@
 															<tr>
 																<td></td>
 																<td><button data-navigate="3"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-down"></i>
 																	</button></td>
 																<td></td>
 																<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 																<td><button data-arm="2"
-																		class="btn btn-primary waves-effect waves-light">
+																		class="button-navigate btn btn-primary waves-effect waves-light">
 																		<i class="icofont icofont-arrow-down"></i>
 																	</button></td>
 															</tr>
@@ -289,9 +289,10 @@
 									dataType : 'json',
 									success : function(
 											result) {
+										document.getElementById('submitLogout').submit();
 									}
 								});
-						window.location.href = "/hackathon/control";
+						//window.location.href = "/hackathon/control";
 					}
 						
 				}, 1000);
@@ -393,7 +394,7 @@
 											});
 
 							// CONTROL BUTTON
-							$("button").click(function() {
+							$(".button-navigate").click(function() {
 								let formData = {
 									deviceId : $("#device_id").val(),
 									navigateControl : $(this).data('navigate'),
@@ -484,7 +485,7 @@
 						  				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 						  				dataType : 'html',
 						  				success : function(result) {
-						  					document.getElementById('submitLogout').submit();
+						  					//document.getElementById('submitLogout').submit();
 						  				}
 						  			});
 						  	  });

@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
 import hackathon.restart.computer.dto.RstListWattingUserDto;
@@ -111,12 +112,13 @@ public class ListWattingUserController {
 		return "listWatingUser :: content2";
 	}
 	@PostMapping("/closeRoomWatting")
+	@ResponseBody
 	public String closeRoomWatting(Model model,Principal principal) {
 		//1. Remove userLogin ra khoi danh sach doi
 		CustomUser loginedUser = (CustomUser) ((Authentication) principal).getPrincipal();
 		Users userInfo = loginedUser.getUsers();
 		listWattingUserService.deleteWattingUserLogin(userInfo.getId());
-		return "redirect:/login";
+		return "200";
 	}
 	private boolean checkUserExitListWating(List<RstListWattingUserDto> listUserWatting, Users userInfo) {
 		List<Integer> listIdUserWatting = new ArrayList<>();

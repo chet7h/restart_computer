@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import hackathon.restart.computer.controller.rest.RobotApiController;
 import hackathon.restart.computer.dto.RstListWattingUserDto;
@@ -40,6 +41,7 @@ public class ControlController {
 	UsersService usersService;
 	@Autowired
 	ListWattingUserService listWattingUserService;
+	
 
 	@GetMapping({ "/", "" })
 	public String index(Model model, Principal principal) {
@@ -59,7 +61,7 @@ public class ControlController {
 		model.addAttribute("userInfo", userInfo);
 		model.addAttribute("roomInfo", roomInfo);
 		model.addAttribute("robotInfo", robotInfo);
-		model.addAttribute("timeControl", roomInfo.getUpdate_date().plusMinutes(10));
+		model.addAttribute("timeControl", roomInfo.getUpdate_date().plusMinutes(1));
 		
 		//4. Check is stop mode
 		model.addAttribute("isStopMode", controlService.isStopMode(roomId));
@@ -88,6 +90,7 @@ public class ControlController {
 	}
 	
 	@PostMapping("/endControl")
+	@ResponseBody
 	public String endControl(@RequestParam String deviceId) {
 		//1. Update room
 		roomInfoService.updateTokenRoom(Integer.parseInt(deviceId), "Page Control", LocalDateTime.now());
@@ -98,7 +101,7 @@ public class ControlController {
 			
 		}
 		
-		return "redirect:/login";
+		return "200";
 	}
 
 }
